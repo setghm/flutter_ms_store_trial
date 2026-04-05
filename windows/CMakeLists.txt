@@ -34,6 +34,10 @@ list(APPEND PLUGIN_SOURCES
   "ms_store_trial_plugin.cpp"
   "ms_store_trial_plugin.h"
 
+  # Helper to run code in UI thread.
+  "foreground_dispatcher.cpp"
+  "foreground_dispatcher.hpp"
+
   # Pigeon generated files
   "ms_store_api.g.cpp"
   "ms_store_api.g.h"

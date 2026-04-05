@@ -57,6 +57,9 @@ template<class T> class ErrorOr {
 };
 
 
+// Defines values that represent the status of a request to purchase an app or add-on.
+//
+// https://learn.microsoft.com/en-us/uwp/api/windows.services.store.storepurchasestatus
 enum class MsStorePurchaseStatus {
   kSucceed = 0,
   kAlreadyPurchased = 1,
@@ -66,21 +69,23 @@ enum class MsStorePurchaseStatus {
 };
 
 
+// Provides license info for the current app.
+//
+// https://learn.microsoft.com/en-us/uwp/api/windows.services.store.storeapplicense
+//
 // Generated class from Pigeon that represents data sent in messages.
 class MsStoreLicense {
  public:
-  // Constructs an object setting all non-nullable fields.
-  explicit MsStoreLicense(
-    bool is_active,
-    bool is_trial,
-    bool is_trial_owned_by_this_user);
-
   // Constructs an object setting all fields.
   explicit MsStoreLicense(
     bool is_active,
     bool is_trial,
     bool is_trial_owned_by_this_user,
-    const int64_t* expiration_timestamp);
+    int64_t trial_time_remaining,
+    int64_t expiration_timestamp,
+    const std::string& sku_store_id,
+    const std::string& extended_json_data,
+    const std::string& trial_unique_id);
 
   bool is_active() const;
   void set_is_active(bool value_arg);
@@ -91,9 +96,20 @@ class MsStoreLicense {
   bool is_trial_owned_by_this_user() const;
   void set_is_trial_owned_by_this_user(bool value_arg);
 
-  const int64_t* expiration_timestamp() const;
-  void set_expiration_timestamp(const int64_t* value_arg);
+  int64_t trial_time_remaining() const;
+  void set_trial_time_remaining(int64_t value_arg);
+
+  int64_t expiration_timestamp() const;
   void set_expiration_timestamp(int64_t value_arg);
+
+  const std::string& sku_store_id() const;
+  void set_sku_store_id(std::string_view value_arg);
+
+  const std::string& extended_json_data() const;
+  void set_extended_json_data(std::string_view value_arg);
+
+  const std::string& trial_unique_id() const;
+  void set_trial_unique_id(std::string_view value_arg);
 
   bool operator==(const MsStoreLicense& other) const;
   bool operator!=(const MsStoreLicense& other) const;
@@ -108,27 +124,55 @@ class MsStoreLicense {
   bool is_active_;
   bool is_trial_;
   bool is_trial_owned_by_this_user_;
-  std::optional<int64_t> expiration_timestamp_;
+  int64_t trial_time_remaining_;
+  int64_t expiration_timestamp_;
+  std::string sku_store_id_;
+  std::string extended_json_data_;
+  std::string trial_unique_id_;
 };
 
 
+// Represents a product that is available in the Microsoft Store.
+//
+// https://learn.microsoft.com/en-us/uwp/api/windows.services.store.storeproduct
+//
 // Generated class from Pigeon that represents data sent in messages.
 class MsStoreProduct {
  public:
   // Constructs an object setting all fields.
   explicit MsStoreProduct(
     const std::string& store_id,
+    const std::string& title,
     const std::string& description,
-    const std::string& price);
+    const std::string& price,
+    const std::string& price_currency_code,
+    const std::string& formatted_price,
+    const std::string& product_kind,
+    const std::string& extended_json_data);
 
   const std::string& store_id() const;
   void set_store_id(std::string_view value_arg);
+
+  const std::string& title() const;
+  void set_title(std::string_view value_arg);
 
   const std::string& description() const;
   void set_description(std::string_view value_arg);
 
   const std::string& price() const;
   void set_price(std::string_view value_arg);
+
+  const std::string& price_currency_code() const;
+  void set_price_currency_code(std::string_view value_arg);
+
+  const std::string& formatted_price() const;
+  void set_formatted_price(std::string_view value_arg);
+
+  const std::string& product_kind() const;
+  void set_product_kind(std::string_view value_arg);
+
+  const std::string& extended_json_data() const;
+  void set_extended_json_data(std::string_view value_arg);
 
   bool operator==(const MsStoreProduct& other) const;
   bool operator!=(const MsStoreProduct& other) const;
@@ -142,8 +186,13 @@ class MsStoreProduct {
   friend class MsStoreFlutterApi;
   friend class PigeonInternalCodecSerializer;
   std::string store_id_;
+  std::string title_;
   std::string description_;
   std::string price_;
+  std::string price_currency_code_;
+  std::string formatted_price_;
+  std::string product_kind_;
+  std::string extended_json_data_;
 };
 
 

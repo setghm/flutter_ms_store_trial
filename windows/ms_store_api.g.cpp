@@ -230,20 +230,20 @@ size_t PigeonInternalDeepHash(const ::flutter::EncodableValue& v) {
 MsStoreLicense::MsStoreLicense(
   bool is_active,
   bool is_trial,
-  bool is_trial_owned_by_this_user)
- : is_active_(is_active),
-    is_trial_(is_trial),
-    is_trial_owned_by_this_user_(is_trial_owned_by_this_user) {}
-
-MsStoreLicense::MsStoreLicense(
-  bool is_active,
-  bool is_trial,
   bool is_trial_owned_by_this_user,
-  const int64_t* expiration_timestamp)
+  int64_t trial_time_remaining,
+  int64_t expiration_timestamp,
+  const std::string& sku_store_id,
+  const std::string& extended_json_data,
+  const std::string& trial_unique_id)
  : is_active_(is_active),
     is_trial_(is_trial),
     is_trial_owned_by_this_user_(is_trial_owned_by_this_user),
-    expiration_timestamp_(expiration_timestamp ? std::optional<int64_t>(*expiration_timestamp) : std::nullopt) {}
+    trial_time_remaining_(trial_time_remaining),
+    expiration_timestamp_(expiration_timestamp),
+    sku_store_id_(sku_store_id),
+    extended_json_data_(extended_json_data),
+    trial_unique_id_(trial_unique_id) {}
 
 bool MsStoreLicense::is_active() const {
   return is_active_;
@@ -272,12 +272,17 @@ void MsStoreLicense::set_is_trial_owned_by_this_user(bool value_arg) {
 }
 
 
-const int64_t* MsStoreLicense::expiration_timestamp() const {
-  return expiration_timestamp_ ? &(*expiration_timestamp_) : nullptr;
+int64_t MsStoreLicense::trial_time_remaining() const {
+  return trial_time_remaining_;
 }
 
-void MsStoreLicense::set_expiration_timestamp(const int64_t* value_arg) {
-  expiration_timestamp_ = value_arg ? std::optional<int64_t>(*value_arg) : std::nullopt;
+void MsStoreLicense::set_trial_time_remaining(int64_t value_arg) {
+  trial_time_remaining_ = value_arg;
+}
+
+
+int64_t MsStoreLicense::expiration_timestamp() const {
+  return expiration_timestamp_;
 }
 
 void MsStoreLicense::set_expiration_timestamp(int64_t value_arg) {
@@ -285,13 +290,44 @@ void MsStoreLicense::set_expiration_timestamp(int64_t value_arg) {
 }
 
 
+const std::string& MsStoreLicense::sku_store_id() const {
+  return sku_store_id_;
+}
+
+void MsStoreLicense::set_sku_store_id(std::string_view value_arg) {
+  sku_store_id_ = value_arg;
+}
+
+
+const std::string& MsStoreLicense::extended_json_data() const {
+  return extended_json_data_;
+}
+
+void MsStoreLicense::set_extended_json_data(std::string_view value_arg) {
+  extended_json_data_ = value_arg;
+}
+
+
+const std::string& MsStoreLicense::trial_unique_id() const {
+  return trial_unique_id_;
+}
+
+void MsStoreLicense::set_trial_unique_id(std::string_view value_arg) {
+  trial_unique_id_ = value_arg;
+}
+
+
 EncodableList MsStoreLicense::ToEncodableList() const {
   EncodableList list;
-  list.reserve(4);
+  list.reserve(8);
   list.push_back(EncodableValue(is_active_));
   list.push_back(EncodableValue(is_trial_));
   list.push_back(EncodableValue(is_trial_owned_by_this_user_));
-  list.push_back(expiration_timestamp_ ? EncodableValue(*expiration_timestamp_) : EncodableValue());
+  list.push_back(EncodableValue(trial_time_remaining_));
+  list.push_back(EncodableValue(expiration_timestamp_));
+  list.push_back(EncodableValue(sku_store_id_));
+  list.push_back(EncodableValue(extended_json_data_));
+  list.push_back(EncodableValue(trial_unique_id_));
   return list;
 }
 
@@ -299,16 +335,17 @@ MsStoreLicense MsStoreLicense::FromEncodableList(const EncodableList& list) {
   MsStoreLicense decoded(
     std::get<bool>(list[0]),
     std::get<bool>(list[1]),
-    std::get<bool>(list[2]));
-  auto& encodable_expiration_timestamp = list[3];
-  if (!encodable_expiration_timestamp.IsNull()) {
-    decoded.set_expiration_timestamp(std::get<int64_t>(encodable_expiration_timestamp));
-  }
+    std::get<bool>(list[2]),
+    std::get<int64_t>(list[3]),
+    std::get<int64_t>(list[4]),
+    std::get<std::string>(list[5]),
+    std::get<std::string>(list[6]),
+    std::get<std::string>(list[7]));
   return decoded;
 }
 
 bool MsStoreLicense::operator==(const MsStoreLicense& other) const {
-  return PigeonInternalDeepEquals(is_active_, other.is_active_) && PigeonInternalDeepEquals(is_trial_, other.is_trial_) && PigeonInternalDeepEquals(is_trial_owned_by_this_user_, other.is_trial_owned_by_this_user_) && PigeonInternalDeepEquals(expiration_timestamp_, other.expiration_timestamp_);
+  return PigeonInternalDeepEquals(is_active_, other.is_active_) && PigeonInternalDeepEquals(is_trial_, other.is_trial_) && PigeonInternalDeepEquals(is_trial_owned_by_this_user_, other.is_trial_owned_by_this_user_) && PigeonInternalDeepEquals(trial_time_remaining_, other.trial_time_remaining_) && PigeonInternalDeepEquals(expiration_timestamp_, other.expiration_timestamp_) && PigeonInternalDeepEquals(sku_store_id_, other.sku_store_id_) && PigeonInternalDeepEquals(extended_json_data_, other.extended_json_data_) && PigeonInternalDeepEquals(trial_unique_id_, other.trial_unique_id_);
 }
 
 bool MsStoreLicense::operator!=(const MsStoreLicense& other) const {
@@ -320,7 +357,11 @@ size_t MsStoreLicense::Hash() const {
   result = result * 31 + PigeonInternalDeepHash(is_active_);
   result = result * 31 + PigeonInternalDeepHash(is_trial_);
   result = result * 31 + PigeonInternalDeepHash(is_trial_owned_by_this_user_);
+  result = result * 31 + PigeonInternalDeepHash(trial_time_remaining_);
   result = result * 31 + PigeonInternalDeepHash(expiration_timestamp_);
+  result = result * 31 + PigeonInternalDeepHash(sku_store_id_);
+  result = result * 31 + PigeonInternalDeepHash(extended_json_data_);
+  result = result * 31 + PigeonInternalDeepHash(trial_unique_id_);
   return result;
 }
 
@@ -332,11 +373,21 @@ size_t PigeonInternalDeepHash(const MsStoreLicense& v) {
 
 MsStoreProduct::MsStoreProduct(
   const std::string& store_id,
+  const std::string& title,
   const std::string& description,
-  const std::string& price)
+  const std::string& price,
+  const std::string& price_currency_code,
+  const std::string& formatted_price,
+  const std::string& product_kind,
+  const std::string& extended_json_data)
  : store_id_(store_id),
+    title_(title),
     description_(description),
-    price_(price) {}
+    price_(price),
+    price_currency_code_(price_currency_code),
+    formatted_price_(formatted_price),
+    product_kind_(product_kind),
+    extended_json_data_(extended_json_data) {}
 
 const std::string& MsStoreProduct::store_id() const {
   return store_id_;
@@ -344,6 +395,15 @@ const std::string& MsStoreProduct::store_id() const {
 
 void MsStoreProduct::set_store_id(std::string_view value_arg) {
   store_id_ = value_arg;
+}
+
+
+const std::string& MsStoreProduct::title() const {
+  return title_;
+}
+
+void MsStoreProduct::set_title(std::string_view value_arg) {
+  title_ = value_arg;
 }
 
 
@@ -365,12 +425,53 @@ void MsStoreProduct::set_price(std::string_view value_arg) {
 }
 
 
+const std::string& MsStoreProduct::price_currency_code() const {
+  return price_currency_code_;
+}
+
+void MsStoreProduct::set_price_currency_code(std::string_view value_arg) {
+  price_currency_code_ = value_arg;
+}
+
+
+const std::string& MsStoreProduct::formatted_price() const {
+  return formatted_price_;
+}
+
+void MsStoreProduct::set_formatted_price(std::string_view value_arg) {
+  formatted_price_ = value_arg;
+}
+
+
+const std::string& MsStoreProduct::product_kind() const {
+  return product_kind_;
+}
+
+void MsStoreProduct::set_product_kind(std::string_view value_arg) {
+  product_kind_ = value_arg;
+}
+
+
+const std::string& MsStoreProduct::extended_json_data() const {
+  return extended_json_data_;
+}
+
+void MsStoreProduct::set_extended_json_data(std::string_view value_arg) {
+  extended_json_data_ = value_arg;
+}
+
+
 EncodableList MsStoreProduct::ToEncodableList() const {
   EncodableList list;
-  list.reserve(3);
+  list.reserve(8);
   list.push_back(EncodableValue(store_id_));
+  list.push_back(EncodableValue(title_));
   list.push_back(EncodableValue(description_));
   list.push_back(EncodableValue(price_));
+  list.push_back(EncodableValue(price_currency_code_));
+  list.push_back(EncodableValue(formatted_price_));
+  list.push_back(EncodableValue(product_kind_));
+  list.push_back(EncodableValue(extended_json_data_));
   return list;
 }
 
@@ -378,12 +479,17 @@ MsStoreProduct MsStoreProduct::FromEncodableList(const EncodableList& list) {
   MsStoreProduct decoded(
     std::get<std::string>(list[0]),
     std::get<std::string>(list[1]),
-    std::get<std::string>(list[2]));
+    std::get<std::string>(list[2]),
+    std::get<std::string>(list[3]),
+    std::get<std::string>(list[4]),
+    std::get<std::string>(list[5]),
+    std::get<std::string>(list[6]),
+    std::get<std::string>(list[7]));
   return decoded;
 }
 
 bool MsStoreProduct::operator==(const MsStoreProduct& other) const {
-  return PigeonInternalDeepEquals(store_id_, other.store_id_) && PigeonInternalDeepEquals(description_, other.description_) && PigeonInternalDeepEquals(price_, other.price_);
+  return PigeonInternalDeepEquals(store_id_, other.store_id_) && PigeonInternalDeepEquals(title_, other.title_) && PigeonInternalDeepEquals(description_, other.description_) && PigeonInternalDeepEquals(price_, other.price_) && PigeonInternalDeepEquals(price_currency_code_, other.price_currency_code_) && PigeonInternalDeepEquals(formatted_price_, other.formatted_price_) && PigeonInternalDeepEquals(product_kind_, other.product_kind_) && PigeonInternalDeepEquals(extended_json_data_, other.extended_json_data_);
 }
 
 bool MsStoreProduct::operator!=(const MsStoreProduct& other) const {
@@ -393,8 +499,13 @@ bool MsStoreProduct::operator!=(const MsStoreProduct& other) const {
 size_t MsStoreProduct::Hash() const {
   size_t result = 1;
   result = result * 31 + PigeonInternalDeepHash(store_id_);
+  result = result * 31 + PigeonInternalDeepHash(title_);
   result = result * 31 + PigeonInternalDeepHash(description_);
   result = result * 31 + PigeonInternalDeepHash(price_);
+  result = result * 31 + PigeonInternalDeepHash(price_currency_code_);
+  result = result * 31 + PigeonInternalDeepHash(formatted_price_);
+  result = result * 31 + PigeonInternalDeepHash(product_kind_);
+  result = result * 31 + PigeonInternalDeepHash(extended_json_data_);
   return result;
 }
 

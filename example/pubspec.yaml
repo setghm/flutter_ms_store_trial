@@ -84,3 +84,13 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+msix_config:
+    debug: true
+    logo_path: windows/runner/resources/app_icon.ico
+    store: true
+    display_name: YOUR APP NAME
+    publisher_display_name: YOUR COMPANY
+    identity_name: YOURCOMPANY.YOURAPPNAME
+    msix_version: 1.0.0.0
+    publisher: CN=YOUR-MICROSOFT-PARTNER-PUBLISHER-IDENTITY

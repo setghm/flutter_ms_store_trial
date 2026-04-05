@@ -107,6 +107,9 @@ int _deepHash(Object? value) {
 }
 
 
+/// Defines values that represent the status of a request to purchase an app or add-on.
+///
+/// https://learn.microsoft.com/en-us/uwp/api/windows.services.store.storepurchasestatus
 enum MsStorePurchaseStatus {
   succeed,
   alreadyPurchased,
@@ -115,12 +118,19 @@ enum MsStorePurchaseStatus {
   serverError,
 }
 
+/// Provides license info for the current app.
+///
+/// https://learn.microsoft.com/en-us/uwp/api/windows.services.store.storeapplicense
 class MsStoreLicense {
   MsStoreLicense({
     required this.isActive,
     required this.isTrial,
     required this.isTrialOwnedByThisUser,
-    this.expirationTimestamp,
+    required this.trialTimeRemaining,
+    required this.expirationTimestamp,
+    required this.skuStoreId,
+    required this.extendedJsonData,
+    required this.trialUniqueId,
   });
 
   bool isActive;
@@ -129,14 +139,26 @@ class MsStoreLicense {
 
   bool isTrialOwnedByThisUser;
 
-  int? expirationTimestamp;
+  int trialTimeRemaining;
+
+  int expirationTimestamp;
+
+  String skuStoreId;
+
+  String extendedJsonData;
+
+  String trialUniqueId;
 
   List<Object?> _toList() {
     return <Object?>[
       isActive,
       isTrial,
       isTrialOwnedByThisUser,
+      trialTimeRemaining,
       expirationTimestamp,
+      skuStoreId,
+      extendedJsonData,
+      trialUniqueId,
     ];
   }
 
@@ -149,7 +171,11 @@ class MsStoreLicense {
       isActive: result[0]! as bool,
       isTrial: result[1]! as bool,
       isTrialOwnedByThisUser: result[2]! as bool,
-      expirationTimestamp: result[3] as int?,
+      trialTimeRemaining: result[3]! as int,
+      expirationTimestamp: result[4]! as int,
+      skuStoreId: result[5]! as String,
+      extendedJsonData: result[6]! as String,
+      trialUniqueId: result[7]! as String,
     );
   }
 
@@ -162,7 +188,7 @@ class MsStoreLicense {
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(isActive, other.isActive) && _deepEquals(isTrial, other.isTrial) && _deepEquals(isTrialOwnedByThisUser, other.isTrialOwnedByThisUser) && _deepEquals(expirationTimestamp, other.expirationTimestamp);
+    return _deepEquals(isActive, other.isActive) && _deepEquals(isTrial, other.isTrial) && _deepEquals(isTrialOwnedByThisUser, other.isTrialOwnedByThisUser) && _deepEquals(trialTimeRemaining, other.trialTimeRemaining) && _deepEquals(expirationTimestamp, other.expirationTimestamp) && _deepEquals(skuStoreId, other.skuStoreId) && _deepEquals(extendedJsonData, other.extendedJsonData) && _deepEquals(trialUniqueId, other.trialUniqueId);
   }
 
   @override
@@ -170,24 +196,47 @@ class MsStoreLicense {
   int get hashCode => _deepHash(<Object?>[runtimeType, ..._toList()]);
 }
 
+/// Represents a product that is available in the Microsoft Store.
+///
+/// https://learn.microsoft.com/en-us/uwp/api/windows.services.store.storeproduct
 class MsStoreProduct {
   MsStoreProduct({
     required this.storeId,
+    required this.title,
     required this.description,
     required this.price,
+    required this.priceCurrencyCode,
+    required this.formattedPrice,
+    required this.productKind,
+    required this.extendedJsonData,
   });
 
   String storeId;
+
+  String title;
 
   String description;
 
   String price;
 
+  String priceCurrencyCode;
+
+  String formattedPrice;
+
+  String productKind;
+
+  String extendedJsonData;
+
   List<Object?> _toList() {
     return <Object?>[
       storeId,
+      title,
       description,
       price,
+      priceCurrencyCode,
+      formattedPrice,
+      productKind,
+      extendedJsonData,
     ];
   }
 
@@ -198,8 +247,13 @@ class MsStoreProduct {
     result as List<Object?>;
     return MsStoreProduct(
       storeId: result[0]! as String,
-      description: result[1]! as String,
-      price: result[2]! as String,
+      title: result[1]! as String,
+      description: result[2]! as String,
+      price: result[3]! as String,
+      priceCurrencyCode: result[4]! as String,
+      formattedPrice: result[5]! as String,
+      productKind: result[6]! as String,
+      extendedJsonData: result[7]! as String,
     );
   }
 
@@ -212,7 +266,7 @@ class MsStoreProduct {
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(storeId, other.storeId) && _deepEquals(description, other.description) && _deepEquals(price, other.price);
+    return _deepEquals(storeId, other.storeId) && _deepEquals(title, other.title) && _deepEquals(description, other.description) && _deepEquals(price, other.price) && _deepEquals(priceCurrencyCode, other.priceCurrencyCode) && _deepEquals(formattedPrice, other.formattedPrice) && _deepEquals(productKind, other.productKind) && _deepEquals(extendedJsonData, other.extendedJsonData);
   }
 
   @override

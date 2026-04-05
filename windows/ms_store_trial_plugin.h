@@ -10,14 +10,16 @@
 #include <winrt/windows.services.store.h>
 
 #include "ms_store_api.g.h"
+#include "foreground_dispatcher.hpp"
 
 namespace ms_store_trial {
 
 class MsStoreTrialPlugin : public MsStoreHostApi, public flutter::Plugin {
 private:
   winrt::Windows::Services::Store::StoreContext context_{ nullptr };
-  winrt::event_token license_changed_token_;  
+  winrt::event_token license_changed_token_;
   std::unique_ptr<MsStoreFlutterApi> flutter_api_;
+  std::unique_ptr<ForegroundDispatcher> foreground_;
 public:
   static void RegisterWithRegistrar(flutter::PluginRegistrarWindows *registrar);
 

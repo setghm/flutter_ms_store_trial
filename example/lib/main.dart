@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:ms_store_trial/ms_store_trial.dart';
 
@@ -15,9 +17,16 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   MsStoreProductResponse? _productResponse;
   MsStorePurchaseResponse? _purchaseResponse;
+  MsStoreLicense? _license;
+
+  late final StreamSubscription<MsStoreLicense> _licenseUpdates;
 
   final _logsController = TextEditingController(text: '');
+  final _extendedLicenseJsonController = TextEditingController(text: '');
+  final _extendedProductJsonController = TextEditingController(text: '');
   final _logsScrollController = ScrollController();
+
+  bool get _isValidProduct => _productResponse?.product != null;
 
   @override
   void initState() {
@@ -31,6 +40,8 @@ class _MyAppState extends State<MyApp> {
           _log('Unable to retrieve the store product for the current app');
         } else {
           _log('Got product response: $_productResponse');
+
+          _extendedProductJsonController.text = _productResponse!.product!.extendedJsonData;
         }
 
         setState(() {
@@ -38,12 +49,31 @@ class _MyAppState extends State<MyApp> {
         });
       }
     });
+
+    _licenseUpdates = MsStoreTrial.instance.licenseStream.listen((event) {
+      _license = event;
+
+      if (mounted) {
+        _log('License update received: $_license');
+
+        _extendedLicenseJsonController.text = _license!.extendedJsonData;
+
+        setState(() {
+          // Update
+        });
+      }
+    });
+
+    MsStoreTrial.instance.restoreLicense();
   }
 
   @override
   void dispose() {
     _logsController.dispose();
+    _extendedLicenseJsonController.dispose();
+    _extendedProductJsonController.dispose();
     _logsScrollController.dispose();
+    _licenseUpdates.cancel();
     super.dispose();
   }
 
@@ -82,24 +112,81 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(title: const Text('Microsoft Store trial example')),
         body: Padding(
           padding: const EdgeInsets.all(10),
-          child: Row(
+          child: Column(
             spacing: 10,
             children: [
               Expanded(
                 flex: 3,
-                child: Card(
-                  child: Column(
-                    spacing: 10,
-                    children: [
-                      if (_productResponse != null)
-                        _buildProductInfo(context),
+                child: Row(
+                  spacing: 10,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: Column(
+                            spacing: 10,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              if (_productResponse != null)
+                                _buildProductInfo(context),
 
-                      _buildBuyButton(context),
+                              if (_isValidProduct && _license != null)
+                                _buildLicenseInfo(context),
 
-                      if (_purchaseResponse != null)
-                        _buildPurchaseInfo(context),
-                    ],
-                  ),
+                              _buildBuyButton(context),
+
+                              if (_purchaseResponse != null)
+                                _buildPurchaseInfo(context),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Card(
+                        child: Column(
+                          children: [
+                            Text('Extended product JSON'),
+                            Divider(height: 5),
+                            Expanded(
+                              child: TextField(
+                                controller: _extendedProductJsonController,
+                                maxLines: null,
+                                minLines: null,
+                                expands: true,
+                                readOnly: true,
+                                keyboardType: TextInputType.multiline,
+                                decoration: const InputDecoration(border: InputBorder.none),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Card(
+                        child: Column(
+                          children: [
+                            Text('Extended license JSON'),
+                            Divider(height: 5),
+                            Expanded(
+                              child: TextField(
+                                controller: _extendedLicenseJsonController,
+                                maxLines: null,
+                                minLines: null,
+                                expands: true,
+                                readOnly: true,
+                                keyboardType: TextInputType.multiline,
+                                decoration: const InputDecoration(border: InputBorder.none),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Expanded(
@@ -111,12 +198,13 @@ class _MyAppState extends State<MyApp> {
                       Divider(height: 5),
                       Expanded(
                         child: TextField(
-                          keyboardType: TextInputType.multiline,
+                          controller: _logsController,
+                          scrollController: _logsScrollController,
                           maxLines: null,
                           minLines: null,
                           expands: true,
-                          controller: _logsController,
-                          scrollController: _logsScrollController,
+                          readOnly: true,
+                          keyboardType: TextInputType.multiline,
                           decoration: const InputDecoration(border: InputBorder.none),
                         ),
                       ),
@@ -144,17 +232,67 @@ class _MyAppState extends State<MyApp> {
         ],
       );
     }
+    return Column(
+      spacing: 5,
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SelectableText(
+          'Error: ${_formatError(_productResponse!.extendedError)}',
+          style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+        ),
+        _productResponse!.isStoreAssociated
+          ? Text(
+            'Microsoft Store Product',
+            style: const TextStyle(color: Colors.green)
+          )
+          : Text(
+            'Not associated with a store product',
+            style: const TextStyle(color: Colors.red)
+          ),
+      ],
+    );
+  }
 
-    return SelectableText('Error: ${_formatError(_productResponse!.extendedError)}');
+  Widget _buildLicenseInfo(BuildContext context) {
+    return Column(
+      spacing: 5,
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          _license!.isTrial ? 'Trial version' : 'Full version',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        Text(
+          _license!.isActive ? 'Activated' : 'Not activated',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: _license!.isActive ? Colors.blue : Colors.red,
+          ),
+        ),
+
+        if (_license!.isTimeLimited)
+          Text('Expires on: ${_license!.expirationDate.toString()}'),
+
+        Text('SKU store ID: ${_license!.skuStoreId}'),
+        Text('Trial unique ID: ${_license!.trialUniqueId}'),
+      ],
+    );
   }
 
   Widget _buildBuyButton(BuildContext context) {
-    final isValidProduct = _productResponse!.product != null;
+    final isAlreadyPurchased = _license?.isTrial ?? false;
 
     return OutlinedButton.icon(
-      onPressed: isValidProduct ? _purchase : null,
+      onPressed: _isValidProduct ? _purchase : null,
       icon: Icon(Icons.shopping_cart),
-      label: Text(isValidProduct ? 'Buy full version' : 'Not available'),
+      label: Text(isAlreadyPurchased
+        ? 'Buy again'
+        : _isValidProduct
+        ? 'Buy full version'
+        : 'Not available'
+      ),
     );
   }
 

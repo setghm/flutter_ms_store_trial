@@ -1,6 +1,6 @@
 name: ms_store_trial
-description: "A new Flutter plugin project."
-version: 0.0.1
+description: "Offer a trial version of your Flutter app in Windows using the Microsoft Store API. "
+version: 1.0.0
 homepage:
 
 environment:

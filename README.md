@@ -43,7 +43,18 @@ flutter pub add microsoft_store_trial
 
 ### Step 3. Testing Microsoft Store trial integration
 
+Once you've configured your MSIX packaging, run this command to create the unpacked MSIX files:
 
+```shell
+dart run msix:build
+```
+
+Navigate to `build\windows\x64\runner\Release\` or `build\windows\x64\runner\Debug\` if you configured your MSIX build as debug.
+Run this to install your package, you might need to enable developer mode and uninstall old versions:
+
+```powershell
+Add-AppxPackage -Register AppxManifest.xml
+```
 
 ### External references
 
@@ -61,3 +72,9 @@ flutter pub add microsoft_store_trial
 
 > [!NOTE]
 > After updating the CMakeLists.txt file, re-run `flutter build windows`.
+
+Command to generate the Pigeon sources:
+
+```shell
+dart run pigeon --input=pigeons/ms_store_api.dart
+```

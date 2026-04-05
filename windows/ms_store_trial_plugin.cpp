@@ -8,11 +8,14 @@
 
 #include <memory>
 #include <sstream>
+#include <chrono>
+#include <inttypes.h>
 
 #include <winrt/windows.foundation.h>
 #include <winrt/windows.services.store.h>
 
 #include "ms_store_api.g.h"
+#include "foreground_dispatcher.hpp"
 
 using namespace winrt::Windows::Services::Store;
 using namespace winrt::Windows::Foundation;
@@ -22,7 +25,7 @@ namespace ms_store_trial {
 // static
 void MsStoreTrialPlugin::RegisterWithRegistrar(
     flutter::PluginRegistrarWindows *registrar) {
-
+    
     auto messenger = registrar->messenger();
 
     auto plugin = std::make_unique<MsStoreTrialPlugin>();
@@ -35,6 +38,8 @@ void MsStoreTrialPlugin::RegisterWithRegistrar(
 }
 
 MsStoreTrialPlugin::MsStoreTrialPlugin() {
+    foreground_ = std::make_unique<ForegroundDispatcher>();
+
     context_ = StoreContext::GetDefault();
 
     license_changed_token_ = context_.OfflineLicensesChanged(
@@ -64,8 +69,13 @@ winrt::fire_and_forget MsStoreTrialPlugin::GetStoreProductForCurrentAppAsync(
 
         MsStoreProduct product{
             winrt::to_string(res.Product().StoreId()),
+            winrt::to_string(res.Product().Title()),
             winrt::to_string(res.Product().Description()),
-            winrt::to_string(res.Product().Price().FormattedPrice())
+            winrt::to_string(res.Product().Price().UnformattedBasePrice()),
+            winrt::to_string(res.Product().Price().CurrencyCode()),
+            winrt::to_string(res.Product().Price().FormattedBasePrice()),
+            winrt::to_string(res.Product().ProductKind()),
+            winrt::to_string(res.Product().ExtendedJsonData())
         };
         MsStoreProductResponse response{
             &product,
@@ -74,8 +84,11 @@ winrt::fire_and_forget MsStoreTrialPlugin::GetStoreProductForCurrentAppAsync(
 
         result(response);
     }
+    catch (winrt::hresult_error const& e) {
+        result(FlutterError("WINRT_EXCEPTION", winrt::to_string(e.message())));
+    }
     catch (const std::exception& e) {
-        result(FlutterError("EXCEPTION", e.what(), nullptr));
+        result(FlutterError("EXCEPTION", e.what()));
     }
 }
 
@@ -85,7 +98,7 @@ winrt::fire_and_forget MsStoreTrialPlugin::RequestCurrentAppPurchaseAsync(
         StoreProductResult productRes = co_await context_.GetStoreProductForCurrentAppAsync();
 
         if (productRes.ExtendedError()) {
-            result(FlutterError("PRODUCT_ERROR", "Unable to retrieve the store product for the current app", nullptr));
+            result(FlutterError("PRODUCT_ERROR", "Unable to retrieve the store product for the current app"));
             co_return;
         }
 
@@ -99,24 +112,34 @@ winrt::fire_and_forget MsStoreTrialPlugin::RequestCurrentAppPurchaseAsync(
 
         result(response);
     }
+    catch (winrt::hresult_error const& e) {
+        result(FlutterError("WINRT_EXCEPTION", winrt::to_string(e.message())));
+    }
     catch (const std::exception& e) {
-        result(FlutterError("EXCEPTION", e.what(), nullptr));
+        result(FlutterError("EXCEPTION", e.what()));
     }
 }
 
 winrt::fire_and_forget MsStoreTrialPlugin::FireCurrentAppLicenseAsync(void) {
     StoreAppLicense res = co_await context_.GetAppLicenseAsync();
 
-    time_t expirationDate = winrt::clock::to_time_t(res.ExpirationDate());
+    foreground_->post([res = std::move(res), this]() {
+        int64_t expirationDate = winrt::clock::to_time_t(res.ExpirationDate()) / 1000;
+        int64_t trialTimeRemaining = std::chrono::duration_cast<std::chrono::milliseconds>(res.TrialTimeRemaining()).count();
 
-    MsStoreLicense license {
-       static_cast<bool>(res.IsActive()),
-       static_cast<bool>(res.IsTrial()),
-       static_cast<bool>(res.IsTrialOwnedByThisUser()),
-       &expirationDate,
-    };
+        MsStoreLicense license{
+            static_cast<bool>(res.IsActive()),
+                      static_cast<bool>(res.IsTrial()),
+                      static_cast<bool>(res.IsTrialOwnedByThisUser()),
+                      trialTimeRemaining,
+                      expirationDate,
+                      winrt::to_string(res.SkuStoreId()),
+                      winrt::to_string(res.ExtendedJsonData()),
+                      winrt::to_string(res.TrialUniqueId()),
+        };
 
-    flutter_api_->OnLicenseChanged(license, []() {}, [](auto) {});
+        flutter_api_->OnLicenseChanged(license, []() {}, [](auto) {});
+    });
 }
 
 }  // namespace ms_store_trial
