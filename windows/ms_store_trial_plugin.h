@@ -23,7 +23,7 @@ private:
 public:
   static void RegisterWithRegistrar(flutter::PluginRegistrarWindows *registrar);
 
-  MsStoreTrialPlugin();
+  MsStoreTrialPlugin(winrt::Windows::Services::Store::StoreContext context);
 
   virtual ~MsStoreTrialPlugin();
 
@@ -46,6 +46,11 @@ public:
       RequestCurrentAppPurchaseAsync(result);
   }
 private:
+    static std::wstring GetPackageFamilyName(void);
+
+    static winrt::Windows::Services::Store::StoreContext
+        InitStoreContext(flutter::PluginRegistrarWindows *registrar);
+
     winrt::fire_and_forget GetStoreProductForCurrentAppAsync(
         std::function<void(ErrorOr<MsStoreProductResponse>)> result);
 

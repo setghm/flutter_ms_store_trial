@@ -17,7 +17,7 @@ LRESULT ForegroundDispatcher::Procedure(HWND hwnd, UINT msg, WPARAM wParam, LPAR
     }
 
     if (self != nullptr && msg == WM_RUN_ON_UI_THREAD) {
-        OutputDebugString(L"[ForegroundDispatcher] Running tasks...\n");
+        OutputDebugString(L"[INFO] Running tasks...\n");
 
         std::queue<std::function<void()>> local_tasks;
 
@@ -27,7 +27,7 @@ LRESULT ForegroundDispatcher::Procedure(HWND hwnd, UINT msg, WPARAM wParam, LPAR
         }
 
         while (!local_tasks.empty()) {
-            OutputDebugString((L"[ForegroundDispatcher] Running task " + winrt::to_hstring(local_tasks.size()) + L"...\n").c_str());
+            OutputDebugString((L"[INFO] Running task " + winrt::to_hstring(local_tasks.size()) + L"...\n").c_str());
             auto& task = local_tasks.front();
             if (task) task();
             local_tasks.pop();
@@ -35,11 +35,8 @@ LRESULT ForegroundDispatcher::Procedure(HWND hwnd, UINT msg, WPARAM wParam, LPAR
 
         return 0;
     }
-    else if (self == nullptr) {
-        OutputDebugString(L"[ForegroundDispatcher] Unable to get self pointer\n");
-    }
-    else if (msg != WM_RUN_ON_UI_THREAD) {
-        OutputDebugString((L"[ForegroundDispatcher] Unexpected message: " + winrt::to_hstring(msg) + L", expected was: " + winrt::to_hstring(WM_RUN_ON_UI_THREAD) + L"\n").c_str());
+    else if (self == nullptr && msg == WM_RUN_ON_UI_THREAD) {
+        OutputDebugString(L"[INFO] Unable to get self pointer\n");
     }
 
     return DefWindowProc(hwnd, msg, wParam, lParam);
@@ -76,6 +73,6 @@ void ForegroundDispatcher::post(std::function<void()> fn) {
         std::lock_guard<std::mutex> lock(mutex_);
         tasks_.push(std::move(fn));
     }
-    OutputDebugString(L"[ForegroundDispatcher] Posting task...\n");
+    OutputDebugString(L"[INFO] Posting task...\n");
     PostMessage(message_hwnd_, WM_RUN_ON_UI_THREAD, 0, 0);
 }
