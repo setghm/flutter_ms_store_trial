@@ -225,9 +225,9 @@ size_t PigeonInternalDeepHash(const ::flutter::EncodableValue& v) {
 }
 
 }  // namespace
-// MsStoreLicense
+// MsStoreAppLicense
 
-MsStoreLicense::MsStoreLicense(
+MsStoreAppLicense::MsStoreAppLicense(
   bool is_active,
   bool is_trial,
   bool is_trial_owned_by_this_user,
@@ -245,79 +245,79 @@ MsStoreLicense::MsStoreLicense(
     extended_json_data_(extended_json_data),
     trial_unique_id_(trial_unique_id) {}
 
-bool MsStoreLicense::is_active() const {
+bool MsStoreAppLicense::is_active() const {
   return is_active_;
 }
 
-void MsStoreLicense::set_is_active(bool value_arg) {
+void MsStoreAppLicense::set_is_active(bool value_arg) {
   is_active_ = value_arg;
 }
 
 
-bool MsStoreLicense::is_trial() const {
+bool MsStoreAppLicense::is_trial() const {
   return is_trial_;
 }
 
-void MsStoreLicense::set_is_trial(bool value_arg) {
+void MsStoreAppLicense::set_is_trial(bool value_arg) {
   is_trial_ = value_arg;
 }
 
 
-bool MsStoreLicense::is_trial_owned_by_this_user() const {
+bool MsStoreAppLicense::is_trial_owned_by_this_user() const {
   return is_trial_owned_by_this_user_;
 }
 
-void MsStoreLicense::set_is_trial_owned_by_this_user(bool value_arg) {
+void MsStoreAppLicense::set_is_trial_owned_by_this_user(bool value_arg) {
   is_trial_owned_by_this_user_ = value_arg;
 }
 
 
-int64_t MsStoreLicense::trial_time_remaining() const {
+int64_t MsStoreAppLicense::trial_time_remaining() const {
   return trial_time_remaining_;
 }
 
-void MsStoreLicense::set_trial_time_remaining(int64_t value_arg) {
+void MsStoreAppLicense::set_trial_time_remaining(int64_t value_arg) {
   trial_time_remaining_ = value_arg;
 }
 
 
-int64_t MsStoreLicense::expiration_timestamp() const {
+int64_t MsStoreAppLicense::expiration_timestamp() const {
   return expiration_timestamp_;
 }
 
-void MsStoreLicense::set_expiration_timestamp(int64_t value_arg) {
+void MsStoreAppLicense::set_expiration_timestamp(int64_t value_arg) {
   expiration_timestamp_ = value_arg;
 }
 
 
-const std::string& MsStoreLicense::sku_store_id() const {
+const std::string& MsStoreAppLicense::sku_store_id() const {
   return sku_store_id_;
 }
 
-void MsStoreLicense::set_sku_store_id(std::string_view value_arg) {
+void MsStoreAppLicense::set_sku_store_id(std::string_view value_arg) {
   sku_store_id_ = value_arg;
 }
 
 
-const std::string& MsStoreLicense::extended_json_data() const {
+const std::string& MsStoreAppLicense::extended_json_data() const {
   return extended_json_data_;
 }
 
-void MsStoreLicense::set_extended_json_data(std::string_view value_arg) {
+void MsStoreAppLicense::set_extended_json_data(std::string_view value_arg) {
   extended_json_data_ = value_arg;
 }
 
 
-const std::string& MsStoreLicense::trial_unique_id() const {
+const std::string& MsStoreAppLicense::trial_unique_id() const {
   return trial_unique_id_;
 }
 
-void MsStoreLicense::set_trial_unique_id(std::string_view value_arg) {
+void MsStoreAppLicense::set_trial_unique_id(std::string_view value_arg) {
   trial_unique_id_ = value_arg;
 }
 
 
-EncodableList MsStoreLicense::ToEncodableList() const {
+EncodableList MsStoreAppLicense::ToEncodableList() const {
   EncodableList list;
   list.reserve(8);
   list.push_back(EncodableValue(is_active_));
@@ -331,8 +331,8 @@ EncodableList MsStoreLicense::ToEncodableList() const {
   return list;
 }
 
-MsStoreLicense MsStoreLicense::FromEncodableList(const EncodableList& list) {
-  MsStoreLicense decoded(
+MsStoreAppLicense MsStoreAppLicense::FromEncodableList(const EncodableList& list) {
+  MsStoreAppLicense decoded(
     std::get<bool>(list[0]),
     std::get<bool>(list[1]),
     std::get<bool>(list[2]),
@@ -344,15 +344,15 @@ MsStoreLicense MsStoreLicense::FromEncodableList(const EncodableList& list) {
   return decoded;
 }
 
-bool MsStoreLicense::operator==(const MsStoreLicense& other) const {
+bool MsStoreAppLicense::operator==(const MsStoreAppLicense& other) const {
   return PigeonInternalDeepEquals(is_active_, other.is_active_) && PigeonInternalDeepEquals(is_trial_, other.is_trial_) && PigeonInternalDeepEquals(is_trial_owned_by_this_user_, other.is_trial_owned_by_this_user_) && PigeonInternalDeepEquals(trial_time_remaining_, other.trial_time_remaining_) && PigeonInternalDeepEquals(expiration_timestamp_, other.expiration_timestamp_) && PigeonInternalDeepEquals(sku_store_id_, other.sku_store_id_) && PigeonInternalDeepEquals(extended_json_data_, other.extended_json_data_) && PigeonInternalDeepEquals(trial_unique_id_, other.trial_unique_id_);
 }
 
-bool MsStoreLicense::operator!=(const MsStoreLicense& other) const {
+bool MsStoreAppLicense::operator!=(const MsStoreAppLicense& other) const {
   return !(*this == other);
 }
 
-size_t MsStoreLicense::Hash() const {
+size_t MsStoreAppLicense::Hash() const {
   size_t result = 1;
   result = result * 31 + PigeonInternalDeepHash(is_active_);
   result = result * 31 + PigeonInternalDeepHash(is_trial_);
@@ -365,7 +365,7 @@ size_t MsStoreLicense::Hash() const {
   return result;
 }
 
-size_t PigeonInternalDeepHash(const MsStoreLicense& v) {
+size_t PigeonInternalDeepHash(const MsStoreAppLicense& v) {
   return v.Hash();
 }
 
@@ -666,7 +666,7 @@ EncodableValue PigeonInternalCodecSerializer::ReadValueOfType(
         return encodable_enum_arg.IsNull() ? EncodableValue() : CustomEncodableValue(static_cast<MsStorePurchaseStatus>(enum_arg_value));
       }
     case 130: {
-        return CustomEncodableValue(MsStoreLicense::FromEncodableList(std::get<EncodableList>(ReadValue(stream))));
+        return CustomEncodableValue(MsStoreAppLicense::FromEncodableList(std::get<EncodableList>(ReadValue(stream))));
       }
     case 131: {
         return CustomEncodableValue(MsStoreProduct::FromEncodableList(std::get<EncodableList>(ReadValue(stream))));
@@ -691,9 +691,9 @@ void PigeonInternalCodecSerializer::WriteValue(
       WriteValue(EncodableValue(static_cast<int>(std::any_cast<MsStorePurchaseStatus>(*custom_value))), stream);
       return;
     }
-    if (custom_value->type() == typeid(MsStoreLicense)) {
+    if (custom_value->type() == typeid(MsStoreAppLicense)) {
       stream->WriteByte(130);
-      WriteValue(EncodableValue(std::any_cast<MsStoreLicense>(*custom_value).ToEncodableList()), stream);
+      WriteValue(EncodableValue(std::any_cast<MsStoreAppLicense>(*custom_value).ToEncodableList()), stream);
       return;
     }
     if (custom_value->type() == typeid(MsStoreProduct)) {
@@ -831,7 +831,7 @@ const ::flutter::StandardMessageCodec& MsStoreFlutterApi::GetCodec() {
 }
 
 void MsStoreFlutterApi::OnLicenseChanged(
-  const MsStoreLicense& license_arg,
+  const MsStoreAppLicense& license_arg,
   std::function<void(void)>&& on_success,
   std::function<void(const FlutterError&)>&& on_error) {
   const std::string channel_name = "dev.flutter.pigeon.ms_store_trial.MsStoreFlutterApi.onLicenseChanged" + message_channel_suffix_;

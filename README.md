@@ -5,76 +5,183 @@ Offer a trial version of your Flutter app in Windows using the Microsoft Store A
 ## Instructions
 
 Before using any functionality of this plugin you must create a Microsoft Partner account, upload
-your app to Microsoft Store and associate your app with a product.
-
-### Step 1. Set up your app as a Microsoft Store product
+your app to Microsoft Store and configure the MSIX packaging.
 
 Before starting make sure you already have
 a [Microsoft Partner account](https://partner.microsoft.com/).
 
+### Part 1. Associate your app with a Microsoft Store Product
+
 Open your [Microsoft Partner dashboard](https://partner.microsoft.com/dashboard), go to **Apps and
-games**, Click on **New product** and select **MSIX or PWA app**. Write the name of your app and
+games**, click on **New product** and select **MSIX or PWA app**. Write the name of your app and
 click **Reserve product name** to create your product.
 
 Once your product is created, complete your app submission (Pricing and availability, Properties,
 Age ratings, Packages, etc.).
 
-However, this won't be your release submission, but this step is needed in order to get the
-published status and start integrating the purchase functionalities, so you may want to do this:
+This step is needed in order to get the published status and shouldn't be a public submission, so you may want to do this:
 
 - Set the visibility to private.
 - Add your own account to test the app.
-- Configure the trial.
+- Configure the trial pricing and time limit.
 
-Pack your app
-as [MSIX](https://docs.flutter.dev/platform-integration/windows/building#msix-packaging) and upload
-it.
+#### Part 1.1. Configure MSIX packaging
 
-Once your app is published you need to download it on your development computer and open it once, so
-the license can be downloaded.
+For an easier configuration use the [msix package](https://pub.dev/packages/msix).
+(Although you can use tools like [winapp](https://learn.microsoft.com/en-us/windows/apps/dev-tools/winapp-cli/guides/flutter) or [msstore](https://learn.microsoft.com/en-us/windows/apps/publish/msstore-dev-cli/overview) its usage won't be covered by this guide).
 
-### Step 2. Use this plugin in your app
+Open your [Microsoft Partner dashboard](https://partner.microsoft.com/dashboard) go to **Apps and
+games**, click on your app to open the **Aplication overview**, once there in the lateral panel go to **Product Identity** under the **Product management** section, take down these values:
 
-Install this plugin:
+- Package/Identity/Name
+- Package/Identity/Publisher
+- Package/Properties/PublisherDisplayName
 
-```shell
-flutter pub add microsoft_store_trial
-```
-
-### Step 3. Testing Microsoft Store trial integration
-
-Once you've configured your MSIX packaging, run this command to create the unpacked MSIX files:
+Add the [msix package](https://pub.dev/packages/msix) as a development dependency:
 
 ```shell
-dart run msix:build
+flutter pub add dev:msix
 ```
 
-Navigate to `build\windows\x64\runner\Release\` or `build\windows\x64\runner\Debug\` if you configured your MSIX build as debug.
-Run this to install your package, you might need to enable developer mode and uninstall old versions:
+Create a configuration section in your `pubspec.yaml` file for the msix packaging:
+
+```yaml
+msix_config:
+    display_name: # Your reserved app name
+    identity_name: # Package/Identity/Name value
+    publisher: # Package/Identity/Publisher value
+    publisher_display_name: # Package/Properties/PublisherDisplayName value
+    store: true
+    msix_version: 1.0.0.0
+    debug: true # You can change this
+    icon: windows/runner/resources/app_icon.ico # You can change this
+    # You can configure more settings if you need, see msix package reference:
+    # https://pub.dev/packages/msix
+```
+
+Pack your app:
+
+```shell
+dart run msix:create
+```
+
+Then attach the generated `.msix` file to your submissions.
+
+Once your app is published you need to download it from the Microsoft Store on your development machine and open it once, so the license can be downloaded.
+
+### Part 2. Integrate the trial version of your app
+
+Add this plugin as a dependency:
+
+```shell
+flutter pub add ms_store_trial
+```
+
+Subscribe to license changes at your app startup, the following snippet shows a general example usage:
+
+```dart
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:ms_store_trial/ms_store_trial.dart';
+
+int main() {
+    runApp(MyApp());
+}
+
+class MyApp extends StatefulWidget {
+    const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+    MsStoreAppLicense? _license;
+    late final StreamSubscription<MsStoreAppLicense> _licenseUpdates;
+
+    @override
+    void initState() {
+        super.initState();
+
+        // Subscribe to license updates first.
+        _licenseUpdates = MsStoreTrial.instance.licenseStream.listen((event) {
+            _license = event;
+            if (mounted) {
+                setState(() {
+                    // Update UI.
+                });
+            }
+        });
+
+        // IMPORTANT: Restore user app license.
+        MsStoreTrial.instance.restoreLicense();
+    }
+
+    @override
+    void dispose() {
+        _licenseUpdates.cancel();
+        super.dispose();
+    }
+
+    @override
+    Widget build(BuildContext context) {
+        final isFullVersion = !(_license?.isTrial) ?? false;
+
+        return MaterialApp(
+            home: Scaffold(
+                appBar: AppBar(title: const Text('Example')),
+                body: Column(
+                    children: [
+                        if (_license != null)
+                            Text('Is full version: $isFullVersion'),
+
+                        if (!isFullVersion)
+                            OutlinedButton(
+                                onPressed: () async {
+                                    final response = await MsStoreTrial.instance.requestPurchase();
+                                    debugPrint('Purchase status: ${response.status}, error: ${response.extendedError}');
+                                    // If success, license update will be delivered through the license stream.
+                                },
+                                child: Text('Purchase full version'),
+                            ),
+                    ]
+                ),
+            ),
+        );
+    }
+}
+```
+
+### Part 3. Testing trial integration
+
+You can test the plugin integration in your app as you add or remove features. However running your app normally as with `flutter run -d windows` won't work as it must be packed as MSIX and installed.
+
+Run the package command, but this time you'll need the unpacked files:
+
+```shell
+dart run msix:build --debug
+```
+
+Now, install your app in your development Windows machine using the `Add-AppxPackage` CmdLet:
 
 ```powershell
+cd build\windows\x64\runner\Debug
+
 Add-AppxPackage -Register AppxManifest.xml
 ```
 
-### External references
+Now your app will be installed and you'll be able to test the full version in-app purchase.
 
-- [In-app purchases and trials](https://learn.microsoft.com/en-us/windows/uwp/monetize/in-app-purchases-and-trials#testing)
+Also you can debug it using Visual Studio as shown in [this guide](https://learn.microsoft.com/en-us/windows/msix/desktop/desktop-to-uwp-debug).
+
+> [!NOTE]
+> You can create promo codes to purchase your app license.
+
+## External references
+
 - [Implement a trial version of your app](https://learn.microsoft.com/en-us/windows/uwp/monetize/implement-a-trial-version-of-your-app)
+- [Testing In-app purchases and trials](https://learn.microsoft.com/en-us/windows/uwp/monetize/in-app-purchases-and-trials#testing)
 - [Enable in-app purchases of apps and add-ons](https://learn.microsoft.com/en-us/windows/uwp/monetize/enable-in-app-purchases-of-apps-and-add-ons)
 - [Set pricing and availability for MSIX app](https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/msix/price-and-availability?pivots=store-installer-msix#free-trial)
 - [Run, debug, and test an MSIX package](https://learn.microsoft.com/en-us/windows/msix/desktop/desktop-to-uwp-debug)
-
-## Developing this plugin
-
-> [!NOTE]
-> In development it is needed to either build the plugin using the Developer Command Prompt for
-> VS or adding the Visual Studio tools to your PATH, otherwise build won't be successfull.
-
-> [!NOTE]
-> After updating the CMakeLists.txt file, re-run `flutter build windows`.
-
-Command to generate the Pigeon sources:
-
-```shell
-dart run pigeon --input=pigeons/ms_store_api.dart
-```

@@ -6,9 +6,8 @@ import 'package:pigeon/pigeon.dart';
     cppHeaderOut: 'windows/ms_store_api.g.h',
     cppSourceOut: 'windows/ms_store_api.g.cpp',
     cppOptions: CppOptions(namespace: 'ms_store_trial'),
-  )
+  ),
 )
-
 @HostApi()
 abstract class MsStoreHostApi {
   @async
@@ -22,13 +21,13 @@ abstract class MsStoreHostApi {
 
 @FlutterApi()
 abstract class MsStoreFlutterApi {
-  void onLicenseChanged(MsStoreLicense license);
+  void onLicenseChanged(MsStoreAppLicense license);
 }
 
 /// Provides license info for the current app.
 ///
 /// https://learn.microsoft.com/en-us/uwp/api/windows.services.store.storeapplicense
-class MsStoreLicense {
+class MsStoreAppLicense {
   final bool isActive;
   final bool isTrial;
   final bool isTrialOwnedByThisUser;
@@ -38,7 +37,7 @@ class MsStoreLicense {
   final String extendedJsonData;
   final String trialUniqueId;
 
-  const MsStoreLicense({
+  const MsStoreAppLicense({
     required this.isActive,
     required this.isTrial,
     required this.isTrialOwnedByThisUser,

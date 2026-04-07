@@ -74,10 +74,10 @@ enum class MsStorePurchaseStatus {
 // https://learn.microsoft.com/en-us/uwp/api/windows.services.store.storeapplicense
 //
 // Generated class from Pigeon that represents data sent in messages.
-class MsStoreLicense {
+class MsStoreAppLicense {
  public:
   // Constructs an object setting all fields.
-  explicit MsStoreLicense(
+  explicit MsStoreAppLicense(
     bool is_active,
     bool is_trial,
     bool is_trial_owned_by_this_user,
@@ -111,12 +111,12 @@ class MsStoreLicense {
   const std::string& trial_unique_id() const;
   void set_trial_unique_id(std::string_view value_arg);
 
-  bool operator==(const MsStoreLicense& other) const;
-  bool operator!=(const MsStoreLicense& other) const;
+  bool operator==(const MsStoreAppLicense& other) const;
+  bool operator!=(const MsStoreAppLicense& other) const;
   /// Returns a hash code value for the object. This method is supported for the benefit of hash tables.
   size_t Hash() const;
  private:
-  static MsStoreLicense FromEncodableList(const ::flutter::EncodableList& list);
+  static MsStoreAppLicense FromEncodableList(const ::flutter::EncodableList& list);
   ::flutter::EncodableList ToEncodableList() const;
   friend class MsStoreHostApi;
   friend class MsStoreFlutterApi;
@@ -314,7 +314,7 @@ class MsStoreFlutterApi {
     const std::string& message_channel_suffix);
   static const ::flutter::StandardMessageCodec& GetCodec();
   void OnLicenseChanged(
-    const MsStoreLicense& license,
+    const MsStoreAppLicense& license,
     std::function<void(void)>&& on_success,
     std::function<void(const FlutterError&)>&& on_error);
  private:

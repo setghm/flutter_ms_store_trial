@@ -55,15 +55,15 @@ std::wstring MsStoreTrialPlugin::GetPackageFamilyName() {
         result = GetCurrentPackageFamilyName(&length, familyName.data());
 
         if (result == ERROR_SUCCESS) {
-            OutputDebugString((L"[INFO] Package family name found: " + winrt::to_hstring(familyName.c_str())).c_str());
+            OutputDebugString((L"[INFO] Package family name found: " + winrt::to_hstring(familyName.c_str()) + L"\n").c_str());
             return familyName;
         }
         else {
-            OutputDebugString((L"[ERROR] Unable to retrieve Package Family Name: " + winrt::to_hstring((int32_t)result)).c_str());
+            OutputDebugString((L"[ERROR] Unable to retrieve Package Family Name: " + winrt::to_hstring((int32_t)result) + L"\n").c_str());
         }
     }
     else {
-        OutputDebugString(L"[ERROR] Application is not packed");
+        OutputDebugString(L"[ERROR] Application is not packed\n");
     }
 
     return L"";
@@ -84,9 +84,12 @@ StoreContext MsStoreTrialPlugin::InitStoreContext(flutter::PluginRegistrarWindow
             auto e = winrt::hresult_error(hr);
             OutputDebugString((L"[ERROR] Unable to associate StoreContext with the current window: " + e.message() + L"\n").c_str());
         }
+        else {
+            OutputDebugString(L"[INFO] Store context initialized successfully!\n");
+        }
     }
     else {
-        OutputDebugString(L"[ERROR] StoreContext does not support IInitializeWithWindow. Check package identity.");
+        OutputDebugString(L"[ERROR] StoreContext does not support IInitializeWithWindow. Check package identity.\n");
     }
 
     return context;
@@ -110,8 +113,6 @@ MsStoreTrialPlugin::~MsStoreTrialPlugin() {
 winrt::fire_and_forget MsStoreTrialPlugin::GetStoreProductForCurrentAppAsync(
     std::function<void(ErrorOr<MsStoreProductResponse>)> result) {
     try {
-        co_await winrt::resume_background();
-
         StoreProductResult res = co_await context_.GetStoreProductForCurrentAppAsync();
 
         if (res.ExtendedError()) {
@@ -122,15 +123,30 @@ winrt::fire_and_forget MsStoreTrialPlugin::GetStoreProductForCurrentAppAsync(
             co_return;
         }
 
+        auto storeProduct = res.Product();
+
+        std::string unformattedPrice = "";
+
+        /**
+        * Accessing the unformatted price when it is zero will raise an exception.
+        * Keep in separated blocks to ensure available data is gathered regardless any possible issue.
+        */
+        try {
+            unformattedPrice = winrt::to_string(storeProduct.Price().UnformattedBasePrice());
+        }
+        catch (...) {
+            OutputDebugString(L"[LOG] Unable to get the unformatted base price\n");
+        }
+
         MsStoreProduct product{
-            winrt::to_string(res.Product().StoreId()),
-            winrt::to_string(res.Product().Title()),
-            winrt::to_string(res.Product().Description()),
-            winrt::to_string(res.Product().Price().UnformattedBasePrice()),
-            winrt::to_string(res.Product().Price().CurrencyCode()),
-            winrt::to_string(res.Product().Price().FormattedBasePrice()),
-            winrt::to_string(res.Product().ProductKind()),
-            winrt::to_string(res.Product().ExtendedJsonData())
+            winrt::to_string(storeProduct.StoreId()),
+            winrt::to_string(storeProduct.Title()),
+            winrt::to_string(storeProduct.Description()),
+            unformattedPrice,
+            winrt::to_string(storeProduct.Price().CurrencyCode()),
+            winrt::to_string(storeProduct.Price().FormattedBasePrice()),
+            winrt::to_string(storeProduct.ProductKind()),
+            winrt::to_string(storeProduct.ExtendedJsonData())
         };
         MsStoreProductResponse response{
             &product,
@@ -150,8 +166,6 @@ winrt::fire_and_forget MsStoreTrialPlugin::GetStoreProductForCurrentAppAsync(
 winrt::fire_and_forget MsStoreTrialPlugin::RequestCurrentAppPurchaseAsync(
     std::function<void(ErrorOr<MsStorePurchaseResponse> reply)> result) {
     try {
-        co_await winrt::resume_background();
-
         StoreProductResult productRes = co_await context_.GetStoreProductForCurrentAppAsync();
 
         if (productRes.ExtendedError()) {
@@ -178,23 +192,24 @@ winrt::fire_and_forget MsStoreTrialPlugin::RequestCurrentAppPurchaseAsync(
 }
 
 winrt::fire_and_forget MsStoreTrialPlugin::FireCurrentAppLicenseAsync(void) {
-    co_await winrt::resume_background();
-
     StoreAppLicense res = co_await context_.GetAppLicenseAsync();
 
+    /**
+    * CRITICAL: We only call Flutter API on platform thread.
+    */
     foreground_->post([res = std::move(res), this]() {
         int64_t expirationDate = winrt::clock::to_time_t(res.ExpirationDate()) / 1000;
         int64_t trialTimeRemaining = std::chrono::duration_cast<std::chrono::milliseconds>(res.TrialTimeRemaining()).count();
 
-        MsStoreLicense license{
+        MsStoreAppLicense license{
             static_cast<bool>(res.IsActive()),
-                      static_cast<bool>(res.IsTrial()),
-                      static_cast<bool>(res.IsTrialOwnedByThisUser()),
-                      trialTimeRemaining,
-                      expirationDate,
-                      winrt::to_string(res.SkuStoreId()),
-                      winrt::to_string(res.ExtendedJsonData()),
-                      winrt::to_string(res.TrialUniqueId()),
+            static_cast<bool>(res.IsTrial()),
+            static_cast<bool>(res.IsTrialOwnedByThisUser()),
+            trialTimeRemaining,
+            expirationDate,
+            winrt::to_string(res.SkuStoreId()),
+            winrt::to_string(res.ExtendedJsonData()),
+            winrt::to_string(res.TrialUniqueId()),
         };
 
         flutter_api_->OnLicenseChanged(license, []() {}, [](auto) {});

@@ -2,29 +2,40 @@ import 'dart:async';
 
 import 'ms_store_api.g.dart';
 
-export 'ms_store_api.g.dart' show
-    MsStoreProduct,
-    MsStoreProductResponse,
-    MsStorePurchaseStatus,
-    MsStorePurchaseResponse,
-    MsStoreLicense;
+export 'ms_store_api.g.dart'
+    show
+        MsStoreProduct,
+        MsStoreProductResponse,
+        MsStorePurchaseStatus,
+        MsStorePurchaseResponse,
+        MsStoreAppLicense;
 
+/// Access Microsoft Store API on Windows.
 abstract class MsStoreTrial {
   static final _instance = _PluginImplementation();
+
+  /// Use the plugin through this field.
   static MsStoreTrial get instance => _instance;
 
-  /// Updates on this app license.
-  Stream<MsStoreLicense> get licenseStream;
+  /// Delivers changes on the current app license.
+  ///
+  /// You should subscribe this stream before you call `restoreLicense()`.
+  Stream<MsStoreAppLicense> get licenseStream;
 
-  /// Returns the Microsoft Store product associated with this app.
+  /// Returns the Microsoft Store product information associated with this app.
   Future<MsStoreProductResponse> getProduct();
 
-  /// Requests the purchase of this product through Microsoft Store.
+  /// Shows the Microsoft Store purchase dialog to the user.
+  ///
+  /// If the product purchase is successful, you'll receive an event in
+  /// `licenseStream` with the new license details.
   Future<MsStorePurchaseResponse> requestPurchase();
 
-  /// Restore the product license.
+  /// Restore the app product license.
   ///
-  /// Results will be sent through licenseStream.
+  /// You might want call this method every time your app starts before the UI is loaded.
+  ///
+  /// Results will be sent through `licenseStream`.
   Future<void> restoreLicense();
 }
 
@@ -34,35 +45,56 @@ class _PluginImplementation implements MsStoreTrial, MsStoreFlutterApi {
   }
 
   final _api = MsStoreHostApi();
-  final _licenseStream = StreamController<MsStoreLicense>.broadcast();
+  final _licenseStream = StreamController<MsStoreAppLicense>.broadcast();
 
   @override
-  Stream<MsStoreLicense> get licenseStream => _licenseStream.stream;
+  Stream<MsStoreAppLicense> get licenseStream => _licenseStream.stream;
 
   @override
-  Future<MsStoreProductResponse> getProduct() => _api.getStoreProductForCurrentApp();
+  Future<MsStoreProductResponse> getProduct() =>
+      _api.getStoreProductForCurrentApp();
 
   @override
-  Future<MsStorePurchaseResponse> requestPurchase() => _api.requestCurrentAppPurchase();
+  Future<MsStorePurchaseResponse> requestPurchase() =>
+      _api.requestCurrentAppPurchase();
 
   @override
   Future<void> restoreLicense() => _api.restoreCurrentAppLicense();
 
   @override
-  void onLicenseChanged(MsStoreLicense license) => _licenseStream.add(license);
+  void onLicenseChanged(MsStoreAppLicense license) =>
+      _licenseStream.add(license);
 }
 
-extension MsStoreLicenseTime on MsStoreLicense {
+extension MsStoreAppLicenseExtension on MsStoreAppLicense {
+  /// Returns true if you configured your app's trial version as time-limited.
+  /// If the full version has already been purchased false will be returned.
   bool get isTimeLimited => expirationTimestamp != 0 && trialTimeRemaining != 0;
 
-  DateTime get expirationDate => DateTime.fromMillisecondsSinceEpoch(expirationTimestamp);
+  /// The expiration date of the trial version of your app.
+  /// If the full version has already been purchased a DateTime(0) object will be returned.
+  DateTime get expirationDate =>
+      DateTime.fromMillisecondsSinceEpoch(expirationTimestamp);
 
-  Duration get trialTimeRemainingDuration => Duration(milliseconds: trialTimeRemaining);
+  /// Trial time remaining duration.
+  /// If the full version has alrady been purchased a Duration.zero object will be returned.
+  Duration get trialTimeRemainingDuration =>
+      Duration(milliseconds: trialTimeRemaining);
 }
 
-extension MsStoreProductChecking on MsStoreProductResponse {
-  /// Check if the app has an associated store product.
+extension MsStoreProductResponseExtension on MsStoreProductResponse {
+  /// Check if the app is an
+  /// [associated store product](https://learn.microsoft.com/en-us/windows/uwp/monetize/in-app-purchases-and-trials#testing).
   ///
-  /// https://learn.microsoft.com/en-us/windows/uwp/monetize/in-app-purchases-and-trials#testing
+  /// You should check this value as a not associated app will always receive a non-trial, activated license.
+  ///
+  /// In order to correctly associate your app with a Microsoft Store Product
+  /// you need to pack it as MSIX and it deploy in your system.
+  ///
   bool get isStoreAssociated => extendedError.toUnsigned(32) != 0x803F6107;
+}
+
+extension MsStoreProductExtension on MsStoreProduct {
+  /// Returns true if the product is free or has a price of 0.
+  bool get isFree => price.isEmpty;
 }

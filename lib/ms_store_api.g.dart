@@ -121,8 +121,8 @@ enum MsStorePurchaseStatus {
 /// Provides license info for the current app.
 ///
 /// https://learn.microsoft.com/en-us/uwp/api/windows.services.store.storeapplicense
-class MsStoreLicense {
-  MsStoreLicense({
+class MsStoreAppLicense {
+  MsStoreAppLicense({
     required this.isActive,
     required this.isTrial,
     required this.isTrialOwnedByThisUser,
@@ -165,9 +165,9 @@ class MsStoreLicense {
   Object encode() {
     return _toList();  }
 
-  static MsStoreLicense decode(Object result) {
+  static MsStoreAppLicense decode(Object result) {
     result as List<Object?>;
-    return MsStoreLicense(
+    return MsStoreAppLicense(
       isActive: result[0]! as bool,
       isTrial: result[1]! as bool,
       isTrialOwnedByThisUser: result[2]! as bool,
@@ -182,7 +182,7 @@ class MsStoreLicense {
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! MsStoreLicense || other.runtimeType != runtimeType) {
+    if (other is! MsStoreAppLicense || other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -375,7 +375,7 @@ class _PigeonCodec extends StandardMessageCodec {
     }    else if (value is MsStorePurchaseStatus) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    }    else if (value is MsStoreLicense) {
+    }    else if (value is MsStoreAppLicense) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
     }    else if (value is MsStoreProduct) {
@@ -399,7 +399,7 @@ class _PigeonCodec extends StandardMessageCodec {
         final value = readValue(buffer) as int?;
         return value == null ? null : MsStorePurchaseStatus.values[value];
       case 130:
-        return MsStoreLicense.decode(readValue(buffer)!);
+        return MsStoreAppLicense.decode(readValue(buffer)!);
       case 131:
         return MsStoreProduct.decode(readValue(buffer)!);
       case 132:
@@ -485,7 +485,7 @@ class MsStoreHostApi {
 abstract class MsStoreFlutterApi {
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
 
-  void onLicenseChanged(MsStoreLicense license);
+  void onLicenseChanged(MsStoreAppLicense license);
 
   static void setUp(MsStoreFlutterApi? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
     messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
@@ -498,7 +498,7 @@ abstract class MsStoreFlutterApi {
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
           final List<Object?> args = message! as List<Object?>;
-          final MsStoreLicense arg_license = args[0]! as MsStoreLicense;
+          final MsStoreAppLicense arg_license = args[0]! as MsStoreAppLicense;
           try {
             api.onLicenseChanged(arg_license);
             return wrapResponse(empty: true);
