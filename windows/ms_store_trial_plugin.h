@@ -37,14 +37,17 @@ public:
   }
 
   void GetStoreProductForCurrentApp(
-      std::function<void(ErrorOr<MsStoreProductResponse>)> result) override {
+      std::function<void(ErrorOr<ProductResponseStruct>)> result) override {
       GetStoreProductForCurrentAppAsync(result);
   }
 
   void RequestCurrentAppPurchase(
-      std::function<void(ErrorOr<MsStorePurchaseResponse> reply)> result) override {
+      std::function<void(ErrorOr<PurchaseResponseStruct> reply)> result) override {
       RequestCurrentAppPurchaseAsync(result);
   }
+
+  void GetPackageFamilyName(
+      std::function<void(ErrorOr<std::string> reply)> result) override;
 private:
     static std::wstring GetPackageFamilyName(void);
 
@@ -52,10 +55,10 @@ private:
         InitStoreContext(flutter::PluginRegistrarWindows *registrar);
 
     winrt::fire_and_forget GetStoreProductForCurrentAppAsync(
-        std::function<void(ErrorOr<MsStoreProductResponse>)> result);
+        std::function<void(ErrorOr<ProductResponseStruct>)> result);
 
     winrt::fire_and_forget RequestCurrentAppPurchaseAsync(
-        std::function<void(ErrorOr<MsStorePurchaseResponse> reply)> result);
+        std::function<void(ErrorOr<PurchaseResponseStruct> reply)> result);
 
     winrt::fire_and_forget FireCurrentAppLicenseAsync(void);
 };

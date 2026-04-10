@@ -107,47 +107,33 @@ int _deepHash(Object? value) {
 }
 
 
-/// Defines values that represent the status of a request to purchase an app or add-on.
-///
-/// https://learn.microsoft.com/en-us/uwp/api/windows.services.store.storepurchasestatus
-enum MsStorePurchaseStatus {
-  succeed,
-  alreadyPurchased,
-  notPurchased,
-  networkError,
-  serverError,
-}
-
-/// Provides license info for the current app.
-///
-/// https://learn.microsoft.com/en-us/uwp/api/windows.services.store.storeapplicense
-class MsStoreAppLicense {
-  MsStoreAppLicense({
-    required this.isActive,
-    required this.isTrial,
-    required this.isTrialOwnedByThisUser,
-    required this.trialTimeRemaining,
-    required this.expirationTimestamp,
-    required this.skuStoreId,
-    required this.extendedJsonData,
-    required this.trialUniqueId,
+class AppLicenseStruct {
+  AppLicenseStruct({
+    this.isActive,
+    this.isTrial,
+    this.isTrialOwnedByThisUser,
+    this.trialTimeRemaining,
+    this.expirationTimestamp,
+    this.skuStoreId,
+    this.trialUniqueId,
+    this.extendedJsonData,
   });
 
-  bool isActive;
+  bool? isActive;
 
-  bool isTrial;
+  bool? isTrial;
 
-  bool isTrialOwnedByThisUser;
+  bool? isTrialOwnedByThisUser;
 
-  int trialTimeRemaining;
+  int? trialTimeRemaining;
 
-  int expirationTimestamp;
+  int? expirationTimestamp;
 
-  String skuStoreId;
+  String? skuStoreId;
 
-  String extendedJsonData;
+  String? trialUniqueId;
 
-  String trialUniqueId;
+  String? extendedJsonData;
 
   List<Object?> _toList() {
     return <Object?>[
@@ -157,38 +143,38 @@ class MsStoreAppLicense {
       trialTimeRemaining,
       expirationTimestamp,
       skuStoreId,
-      extendedJsonData,
       trialUniqueId,
+      extendedJsonData,
     ];
   }
 
   Object encode() {
     return _toList();  }
 
-  static MsStoreAppLicense decode(Object result) {
+  static AppLicenseStruct decode(Object result) {
     result as List<Object?>;
-    return MsStoreAppLicense(
-      isActive: result[0]! as bool,
-      isTrial: result[1]! as bool,
-      isTrialOwnedByThisUser: result[2]! as bool,
-      trialTimeRemaining: result[3]! as int,
-      expirationTimestamp: result[4]! as int,
-      skuStoreId: result[5]! as String,
-      extendedJsonData: result[6]! as String,
-      trialUniqueId: result[7]! as String,
+    return AppLicenseStruct(
+      isActive: result[0] as bool?,
+      isTrial: result[1] as bool?,
+      isTrialOwnedByThisUser: result[2] as bool?,
+      trialTimeRemaining: result[3] as int?,
+      expirationTimestamp: result[4] as int?,
+      skuStoreId: result[5] as String?,
+      trialUniqueId: result[6] as String?,
+      extendedJsonData: result[7] as String?,
     );
   }
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! MsStoreAppLicense || other.runtimeType != runtimeType) {
+    if (other is! AppLicenseStruct || other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(isActive, other.isActive) && _deepEquals(isTrial, other.isTrial) && _deepEquals(isTrialOwnedByThisUser, other.isTrialOwnedByThisUser) && _deepEquals(trialTimeRemaining, other.trialTimeRemaining) && _deepEquals(expirationTimestamp, other.expirationTimestamp) && _deepEquals(skuStoreId, other.skuStoreId) && _deepEquals(extendedJsonData, other.extendedJsonData) && _deepEquals(trialUniqueId, other.trialUniqueId);
+    return _deepEquals(isActive, other.isActive) && _deepEquals(isTrial, other.isTrial) && _deepEquals(isTrialOwnedByThisUser, other.isTrialOwnedByThisUser) && _deepEquals(trialTimeRemaining, other.trialTimeRemaining) && _deepEquals(expirationTimestamp, other.expirationTimestamp) && _deepEquals(skuStoreId, other.skuStoreId) && _deepEquals(trialUniqueId, other.trialUniqueId) && _deepEquals(extendedJsonData, other.extendedJsonData);
   }
 
   @override
@@ -196,46 +182,85 @@ class MsStoreAppLicense {
   int get hashCode => _deepHash(<Object?>[runtimeType, ..._toList()]);
 }
 
-/// Represents a product that is available in the Microsoft Store.
-///
-/// https://learn.microsoft.com/en-us/uwp/api/windows.services.store.storeproduct
-class MsStoreProduct {
-  MsStoreProduct({
-    required this.storeId,
-    required this.title,
-    required this.description,
-    required this.price,
-    required this.priceCurrencyCode,
-    required this.formattedPrice,
-    required this.productKind,
-    required this.extendedJsonData,
+class ProductPriceStruct {
+  ProductPriceStruct({
+    this.formattedPrice,
+    this.currencyCode,
+    this.unformattedPrice,
   });
 
-  String storeId;
+  String? formattedPrice;
 
-  String title;
+  String? currencyCode;
 
-  String description;
+  String? unformattedPrice;
 
-  String price;
+  List<Object?> _toList() {
+    return <Object?>[
+      formattedPrice,
+      currencyCode,
+      unformattedPrice,
+    ];
+  }
 
-  String priceCurrencyCode;
+  Object encode() {
+    return _toList();  }
 
-  String formattedPrice;
+  static ProductPriceStruct decode(Object result) {
+    result as List<Object?>;
+    return ProductPriceStruct(
+      formattedPrice: result[0] as String?,
+      currencyCode: result[1] as String?,
+      unformattedPrice: result[2] as String?,
+    );
+  }
 
-  String productKind;
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! ProductPriceStruct || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(formattedPrice, other.formattedPrice) && _deepEquals(currencyCode, other.currencyCode) && _deepEquals(unformattedPrice, other.unformattedPrice);
+  }
 
-  String extendedJsonData;
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => _deepHash(<Object?>[runtimeType, ..._toList()]);
+}
+
+class ProductStruct {
+  ProductStruct({
+    this.storeId,
+    this.title,
+    this.description,
+    this.productKind,
+    this.price,
+    this.extendedJsonData,
+  });
+
+  String? storeId;
+
+  String? title;
+
+  String? description;
+
+  String? productKind;
+
+  ProductPriceStruct? price;
+
+  String? extendedJsonData;
 
   List<Object?> _toList() {
     return <Object?>[
       storeId,
       title,
       description,
-      price,
-      priceCurrencyCode,
-      formattedPrice,
       productKind,
+      price,
       extendedJsonData,
     ];
   }
@@ -243,30 +268,28 @@ class MsStoreProduct {
   Object encode() {
     return _toList();  }
 
-  static MsStoreProduct decode(Object result) {
+  static ProductStruct decode(Object result) {
     result as List<Object?>;
-    return MsStoreProduct(
-      storeId: result[0]! as String,
-      title: result[1]! as String,
-      description: result[2]! as String,
-      price: result[3]! as String,
-      priceCurrencyCode: result[4]! as String,
-      formattedPrice: result[5]! as String,
-      productKind: result[6]! as String,
-      extendedJsonData: result[7]! as String,
+    return ProductStruct(
+      storeId: result[0] as String?,
+      title: result[1] as String?,
+      description: result[2] as String?,
+      productKind: result[3] as String?,
+      price: result[4] as ProductPriceStruct?,
+      extendedJsonData: result[5] as String?,
     );
   }
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! MsStoreProduct || other.runtimeType != runtimeType) {
+    if (other is! ProductStruct || other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(storeId, other.storeId) && _deepEquals(title, other.title) && _deepEquals(description, other.description) && _deepEquals(price, other.price) && _deepEquals(priceCurrencyCode, other.priceCurrencyCode) && _deepEquals(formattedPrice, other.formattedPrice) && _deepEquals(productKind, other.productKind) && _deepEquals(extendedJsonData, other.extendedJsonData);
+    return _deepEquals(storeId, other.storeId) && _deepEquals(title, other.title) && _deepEquals(description, other.description) && _deepEquals(productKind, other.productKind) && _deepEquals(price, other.price) && _deepEquals(extendedJsonData, other.extendedJsonData);
   }
 
   @override
@@ -274,44 +297,44 @@ class MsStoreProduct {
   int get hashCode => _deepHash(<Object?>[runtimeType, ..._toList()]);
 }
 
-class MsStoreProductResponse {
-  MsStoreProductResponse({
+class ProductResponseStruct {
+  ProductResponseStruct({
     this.product,
-    required this.extendedError,
+    this.extendededError,
   });
 
-  MsStoreProduct? product;
+  ProductStruct? product;
 
-  int extendedError;
+  int? extendededError;
 
   List<Object?> _toList() {
     return <Object?>[
       product,
-      extendedError,
+      extendededError,
     ];
   }
 
   Object encode() {
     return _toList();  }
 
-  static MsStoreProductResponse decode(Object result) {
+  static ProductResponseStruct decode(Object result) {
     result as List<Object?>;
-    return MsStoreProductResponse(
-      product: result[0] as MsStoreProduct?,
-      extendedError: result[1]! as int,
+    return ProductResponseStruct(
+      product: result[0] as ProductStruct?,
+      extendededError: result[1] as int?,
     );
   }
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! MsStoreProductResponse || other.runtimeType != runtimeType) {
+    if (other is! ProductResponseStruct || other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(product, other.product) && _deepEquals(extendedError, other.extendedError);
+    return _deepEquals(product, other.product) && _deepEquals(extendededError, other.extendededError);
   }
 
   @override
@@ -319,15 +342,15 @@ class MsStoreProductResponse {
   int get hashCode => _deepHash(<Object?>[runtimeType, ..._toList()]);
 }
 
-class MsStorePurchaseResponse {
-  MsStorePurchaseResponse({
-    required this.status,
-    required this.extendedError,
+class PurchaseResponseStruct {
+  PurchaseResponseStruct({
+    this.status,
+    this.extendedError,
   });
 
-  MsStorePurchaseStatus status;
+  int? status;
 
-  int extendedError;
+  int? extendedError;
 
   List<Object?> _toList() {
     return <Object?>[
@@ -339,18 +362,18 @@ class MsStorePurchaseResponse {
   Object encode() {
     return _toList();  }
 
-  static MsStorePurchaseResponse decode(Object result) {
+  static PurchaseResponseStruct decode(Object result) {
     result as List<Object?>;
-    return MsStorePurchaseResponse(
-      status: result[0]! as MsStorePurchaseStatus,
-      extendedError: result[1]! as int,
+    return PurchaseResponseStruct(
+      status: result[0] as int?,
+      extendedError: result[1] as int?,
     );
   }
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! MsStorePurchaseResponse || other.runtimeType != runtimeType) {
+    if (other is! PurchaseResponseStruct || other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -372,19 +395,19 @@ class _PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    }    else if (value is MsStorePurchaseStatus) {
+    }    else if (value is AppLicenseStruct) {
       buffer.putUint8(129);
-      writeValue(buffer, value.index);
-    }    else if (value is MsStoreAppLicense) {
+      writeValue(buffer, value.encode());
+    }    else if (value is ProductPriceStruct) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
-    }    else if (value is MsStoreProduct) {
+    }    else if (value is ProductStruct) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
-    }    else if (value is MsStoreProductResponse) {
+    }    else if (value is ProductResponseStruct) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    }    else if (value is MsStorePurchaseResponse) {
+    }    else if (value is PurchaseResponseStruct) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
     } else {
@@ -396,16 +419,15 @@ class _PigeonCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 129:
-        final value = readValue(buffer) as int?;
-        return value == null ? null : MsStorePurchaseStatus.values[value];
+        return AppLicenseStruct.decode(readValue(buffer)!);
       case 130:
-        return MsStoreAppLicense.decode(readValue(buffer)!);
+        return ProductPriceStruct.decode(readValue(buffer)!);
       case 131:
-        return MsStoreProduct.decode(readValue(buffer)!);
+        return ProductStruct.decode(readValue(buffer)!);
       case 132:
-        return MsStoreProductResponse.decode(readValue(buffer)!);
+        return ProductResponseStruct.decode(readValue(buffer)!);
       case 133:
-        return MsStorePurchaseResponse.decode(readValue(buffer)!);
+        return PurchaseResponseStruct.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -425,7 +447,26 @@ class MsStoreHostApi {
 
   final String pigeonVar_messageChannelSuffix;
 
-  Future<MsStoreProductResponse> getStoreProductForCurrentApp() async {
+  Future<String> getPackageFamilyName() async {
+    final pigeonVar_channelName = 'dev.flutter.pigeon.ms_store_trial.MsStoreHostApi.getPackageFamilyName$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
+    final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
+
+    final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
+        pigeonVar_replyList,
+        pigeonVar_channelName,
+        isNullValid: false,
+    )
+    ;
+    return pigeonVar_replyValue! as String;
+  }
+
+  Future<ProductResponseStruct> getStoreProductForCurrentApp() async {
     final pigeonVar_channelName = 'dev.flutter.pigeon.ms_store_trial.MsStoreHostApi.getStoreProductForCurrentApp$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -441,10 +482,10 @@ class MsStoreHostApi {
         isNullValid: false,
     )
     ;
-    return pigeonVar_replyValue! as MsStoreProductResponse;
+    return pigeonVar_replyValue! as ProductResponseStruct;
   }
 
-  Future<MsStorePurchaseResponse> requestCurrentAppPurchase() async {
+  Future<PurchaseResponseStruct> requestCurrentAppPurchase() async {
     final pigeonVar_channelName = 'dev.flutter.pigeon.ms_store_trial.MsStoreHostApi.requestCurrentAppPurchase$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -460,7 +501,7 @@ class MsStoreHostApi {
         isNullValid: false,
     )
     ;
-    return pigeonVar_replyValue! as MsStorePurchaseResponse;
+    return pigeonVar_replyValue! as PurchaseResponseStruct;
   }
 
   Future<void> restoreCurrentAppLicense() async {
@@ -485,7 +526,7 @@ class MsStoreHostApi {
 abstract class MsStoreFlutterApi {
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
 
-  void onLicenseChanged(MsStoreAppLicense license);
+  void onLicenseChanged(AppLicenseStruct license);
 
   static void setUp(MsStoreFlutterApi? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
     messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
@@ -498,7 +539,7 @@ abstract class MsStoreFlutterApi {
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
           final List<Object?> args = message! as List<Object?>;
-          final MsStoreAppLicense arg_license = args[0]! as MsStoreAppLicense;
+          final AppLicenseStruct arg_license = args[0]! as AppLicenseStruct;
           try {
             api.onLicenseChanged(arg_license);
             return wrapResponse(empty: true);

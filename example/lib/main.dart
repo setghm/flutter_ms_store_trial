@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:ms_store_trial_example/dev_mode_app.dart';
+import 'package:ms_store_trial_example/development_app.dart';
+import 'package:ms_store_trial_example/example_app.dart';
 
 void main() {
-  runApp(const DevModeApp());
+  // For development purposes:
+  runApp(const DevelopmentApp());
+
+  // For quick examples:
+  //runApp(const ExampleApp());
 }

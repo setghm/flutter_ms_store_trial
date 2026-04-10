@@ -7,19 +7,18 @@ Offer a trial version of your Flutter app in Windows using the Microsoft Store A
 Before using any functionality of this plugin you must create a Microsoft Partner account, upload
 your app to Microsoft Store and configure the MSIX packaging.
 
-Before starting make sure you already have
-a [Microsoft Partner account](https://partner.microsoft.com/).
+Before starting make sure you have a [Microsoft Partner account](https://partner.microsoft.com/).
 
 ### Part 1. Associate your app with a Microsoft Store Product
 
 Open your [Microsoft Partner dashboard](https://partner.microsoft.com/dashboard), go to **Apps and
-games**, click on **New product** and select **MSIX or PWA app**. Write the name of your app and
+games**, click on **New product** and select **MSIX or PWA app**. Enter the name of your app and
 click **Reserve product name** to create your product.
 
 Once your product is created, complete your app submission (Pricing and availability, Properties,
 Age ratings, Packages, etc.).
 
-This step is needed in order to get the published status and shouldn't be a public submission, so you may want to do this:
+This doesn't need to be a public submission, so you may want to:
 
 - Set the visibility to private.
 - Add your own account to test the app.
@@ -31,7 +30,7 @@ For an easier configuration use the [msix package](https://pub.dev/packages/msix
 (Although you can use tools like [winapp](https://learn.microsoft.com/en-us/windows/apps/dev-tools/winapp-cli/guides/flutter) or [msstore](https://learn.microsoft.com/en-us/windows/apps/publish/msstore-dev-cli/overview) its usage won't be covered by this guide).
 
 Open your [Microsoft Partner dashboard](https://partner.microsoft.com/dashboard) go to **Apps and
-games**, click on your app to open the **Aplication overview**, once there in the lateral panel go to **Product Identity** under the **Product management** section, take down these values:
+games**, click on your app to open the **Application overview**, once there in the side panel go to **Product Identity** under the **Product management** section, note these values:
 
 - Package/Identity/Name
 - Package/Identity/Publisher
@@ -69,7 +68,7 @@ Then attach the generated `.msix` file to your submissions.
 
 Once your app is published you need to download it from the Microsoft Store on your development machine and open it once, so the license can be downloaded.
 
-### Part 2. Integrate the trial version of your app
+### Part 2. Integrate a trial in your app
 
 Add this plugin as a dependency:
 
@@ -77,7 +76,7 @@ Add this plugin as a dependency:
 flutter pub add ms_store_trial
 ```
 
-Subscribe to license changes at your app startup, the following snippet shows a general example usage:
+Subscribe to license changes at app startup. The following snippet shows a general usage example:
 
 ```dart
 import 'dart:async';
@@ -126,7 +125,7 @@ class _MyAppState extends State<MyApp> {
 
     @override
     Widget build(BuildContext context) {
-        final isFullVersion = !(_license?.isTrial) ?? false;
+        final isFullVersion = _license?.isFullVersionActive ?? false;
 
         return MaterialApp(
             home: Scaffold(
@@ -155,7 +154,7 @@ class _MyAppState extends State<MyApp> {
 
 ### Part 3. Testing trial integration
 
-You can test the plugin integration in your app as you add or remove features. However running your app normally as with `flutter run -d windows` won't work as it must be packed as MSIX and installed.
+You can test the plugin integration in your app when you're developing it. However running your app normally, such as with `flutter run -d windows` won't work as it must be packed as MSIX and it must also be installed.
 
 Run the package command, but this time you'll need the unpacked files:
 
@@ -163,7 +162,7 @@ Run the package command, but this time you'll need the unpacked files:
 dart run msix:build --debug
 ```
 
-Now, install your app in your development Windows machine using the `Add-AppxPackage` CmdLet:
+Now, install your app on your development Windows machine using the `Add-AppxPackage` CmdLet:
 
 ```powershell
 cd build\windows\x64\runner\Debug
@@ -171,12 +170,28 @@ cd build\windows\x64\runner\Debug
 Add-AppxPackage -Register AppxManifest.xml
 ```
 
-Now your app will be installed and you'll be able to test the full version in-app purchase.
+Now your app will be installed and you'll be able to test the trial integration.
 
 Also you can debug it using Visual Studio as shown in [this guide](https://learn.microsoft.com/en-us/windows/msix/desktop/desktop-to-uwp-debug).
 
+## Notes
+
+> [!IMPORTANT]
+> When releasing to Microsoft Store don't forget to pack in release mode, otherwise
+> your users will get missing DLL files errors.
+
 > [!NOTE]
-> You can create promo codes to purchase your app license.
+> _Microsoft Store limitation_
+>
+> Methods to purchase your own app includes:
+> - Create promo codes and redeem at https://account.microsoft.com/billing/redeem
+> - Set your app price to zero, free trial will still appear if configured
+
+> [!NOTE]
+> _Microsoft Store limitation_
+>
+> I didn't find a method to perform a re-purchase, although you can try with multiple
+> Microsoft accounts or different app submissions.
 
 ## External references
 

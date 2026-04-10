@@ -57,209 +57,252 @@ template<class T> class ErrorOr {
 };
 
 
-// Defines values that represent the status of a request to purchase an app or add-on.
-//
-// https://learn.microsoft.com/en-us/uwp/api/windows.services.store.storepurchasestatus
-enum class MsStorePurchaseStatus {
-  kSucceed = 0,
-  kAlreadyPurchased = 1,
-  kNotPurchased = 2,
-  kNetworkError = 3,
-  kServerError = 4
-};
-
-
-// Provides license info for the current app.
-//
-// https://learn.microsoft.com/en-us/uwp/api/windows.services.store.storeapplicense
-//
-// Generated class from Pigeon that represents data sent in messages.
-class MsStoreAppLicense {
- public:
-  // Constructs an object setting all fields.
-  explicit MsStoreAppLicense(
-    bool is_active,
-    bool is_trial,
-    bool is_trial_owned_by_this_user,
-    int64_t trial_time_remaining,
-    int64_t expiration_timestamp,
-    const std::string& sku_store_id,
-    const std::string& extended_json_data,
-    const std::string& trial_unique_id);
-
-  bool is_active() const;
-  void set_is_active(bool value_arg);
-
-  bool is_trial() const;
-  void set_is_trial(bool value_arg);
-
-  bool is_trial_owned_by_this_user() const;
-  void set_is_trial_owned_by_this_user(bool value_arg);
-
-  int64_t trial_time_remaining() const;
-  void set_trial_time_remaining(int64_t value_arg);
-
-  int64_t expiration_timestamp() const;
-  void set_expiration_timestamp(int64_t value_arg);
-
-  const std::string& sku_store_id() const;
-  void set_sku_store_id(std::string_view value_arg);
-
-  const std::string& extended_json_data() const;
-  void set_extended_json_data(std::string_view value_arg);
-
-  const std::string& trial_unique_id() const;
-  void set_trial_unique_id(std::string_view value_arg);
-
-  bool operator==(const MsStoreAppLicense& other) const;
-  bool operator!=(const MsStoreAppLicense& other) const;
-  /// Returns a hash code value for the object. This method is supported for the benefit of hash tables.
-  size_t Hash() const;
- private:
-  static MsStoreAppLicense FromEncodableList(const ::flutter::EncodableList& list);
-  ::flutter::EncodableList ToEncodableList() const;
-  friend class MsStoreHostApi;
-  friend class MsStoreFlutterApi;
-  friend class PigeonInternalCodecSerializer;
-  bool is_active_;
-  bool is_trial_;
-  bool is_trial_owned_by_this_user_;
-  int64_t trial_time_remaining_;
-  int64_t expiration_timestamp_;
-  std::string sku_store_id_;
-  std::string extended_json_data_;
-  std::string trial_unique_id_;
-};
-
-
-// Represents a product that is available in the Microsoft Store.
-//
-// https://learn.microsoft.com/en-us/uwp/api/windows.services.store.storeproduct
-//
-// Generated class from Pigeon that represents data sent in messages.
-class MsStoreProduct {
- public:
-  // Constructs an object setting all fields.
-  explicit MsStoreProduct(
-    const std::string& store_id,
-    const std::string& title,
-    const std::string& description,
-    const std::string& price,
-    const std::string& price_currency_code,
-    const std::string& formatted_price,
-    const std::string& product_kind,
-    const std::string& extended_json_data);
-
-  const std::string& store_id() const;
-  void set_store_id(std::string_view value_arg);
-
-  const std::string& title() const;
-  void set_title(std::string_view value_arg);
-
-  const std::string& description() const;
-  void set_description(std::string_view value_arg);
-
-  const std::string& price() const;
-  void set_price(std::string_view value_arg);
-
-  const std::string& price_currency_code() const;
-  void set_price_currency_code(std::string_view value_arg);
-
-  const std::string& formatted_price() const;
-  void set_formatted_price(std::string_view value_arg);
-
-  const std::string& product_kind() const;
-  void set_product_kind(std::string_view value_arg);
-
-  const std::string& extended_json_data() const;
-  void set_extended_json_data(std::string_view value_arg);
-
-  bool operator==(const MsStoreProduct& other) const;
-  bool operator!=(const MsStoreProduct& other) const;
-  /// Returns a hash code value for the object. This method is supported for the benefit of hash tables.
-  size_t Hash() const;
- private:
-  static MsStoreProduct FromEncodableList(const ::flutter::EncodableList& list);
-  ::flutter::EncodableList ToEncodableList() const;
-  friend class MsStoreProductResponse;
-  friend class MsStoreHostApi;
-  friend class MsStoreFlutterApi;
-  friend class PigeonInternalCodecSerializer;
-  std::string store_id_;
-  std::string title_;
-  std::string description_;
-  std::string price_;
-  std::string price_currency_code_;
-  std::string formatted_price_;
-  std::string product_kind_;
-  std::string extended_json_data_;
-};
-
 
 // Generated class from Pigeon that represents data sent in messages.
-class MsStoreProductResponse {
+class AppLicenseStruct {
  public:
   // Constructs an object setting all non-nullable fields.
-  explicit MsStoreProductResponse(int64_t extended_error);
+  AppLicenseStruct();
 
   // Constructs an object setting all fields.
-  explicit MsStoreProductResponse(
-    const MsStoreProduct* product,
-    int64_t extended_error);
+  explicit AppLicenseStruct(
+    const bool* is_active,
+    const bool* is_trial,
+    const bool* is_trial_owned_by_this_user,
+    const int64_t* trial_time_remaining,
+    const int64_t* expiration_timestamp,
+    const std::string* sku_store_id,
+    const std::string* trial_unique_id,
+    const std::string* extended_json_data);
 
-  ~MsStoreProductResponse() = default;
-  MsStoreProductResponse(const MsStoreProductResponse& other);
-  MsStoreProductResponse& operator=(const MsStoreProductResponse& other);
-  MsStoreProductResponse(MsStoreProductResponse&& other) = default;
-  MsStoreProductResponse& operator=(MsStoreProductResponse&& other) noexcept = default;
-  const MsStoreProduct* product() const;
-  void set_product(const MsStoreProduct* value_arg);
-  void set_product(const MsStoreProduct& value_arg);
+  const bool* is_active() const;
+  void set_is_active(const bool* value_arg);
+  void set_is_active(bool value_arg);
 
-  int64_t extended_error() const;
-  void set_extended_error(int64_t value_arg);
+  const bool* is_trial() const;
+  void set_is_trial(const bool* value_arg);
+  void set_is_trial(bool value_arg);
 
-  bool operator==(const MsStoreProductResponse& other) const;
-  bool operator!=(const MsStoreProductResponse& other) const;
+  const bool* is_trial_owned_by_this_user() const;
+  void set_is_trial_owned_by_this_user(const bool* value_arg);
+  void set_is_trial_owned_by_this_user(bool value_arg);
+
+  const int64_t* trial_time_remaining() const;
+  void set_trial_time_remaining(const int64_t* value_arg);
+  void set_trial_time_remaining(int64_t value_arg);
+
+  const int64_t* expiration_timestamp() const;
+  void set_expiration_timestamp(const int64_t* value_arg);
+  void set_expiration_timestamp(int64_t value_arg);
+
+  const std::string* sku_store_id() const;
+  void set_sku_store_id(const std::string_view* value_arg);
+  void set_sku_store_id(std::string_view value_arg);
+
+  const std::string* trial_unique_id() const;
+  void set_trial_unique_id(const std::string_view* value_arg);
+  void set_trial_unique_id(std::string_view value_arg);
+
+  const std::string* extended_json_data() const;
+  void set_extended_json_data(const std::string_view* value_arg);
+  void set_extended_json_data(std::string_view value_arg);
+
+  bool operator==(const AppLicenseStruct& other) const;
+  bool operator!=(const AppLicenseStruct& other) const;
   /// Returns a hash code value for the object. This method is supported for the benefit of hash tables.
   size_t Hash() const;
  private:
-  static MsStoreProductResponse FromEncodableList(const ::flutter::EncodableList& list);
+  static AppLicenseStruct FromEncodableList(const ::flutter::EncodableList& list);
   ::flutter::EncodableList ToEncodableList() const;
   friend class MsStoreHostApi;
   friend class MsStoreFlutterApi;
   friend class PigeonInternalCodecSerializer;
-  std::unique_ptr<MsStoreProduct> product_;
-  int64_t extended_error_;
+  std::optional<bool> is_active_;
+  std::optional<bool> is_trial_;
+  std::optional<bool> is_trial_owned_by_this_user_;
+  std::optional<int64_t> trial_time_remaining_;
+  std::optional<int64_t> expiration_timestamp_;
+  std::optional<std::string> sku_store_id_;
+  std::optional<std::string> trial_unique_id_;
+  std::optional<std::string> extended_json_data_;
 };
 
 
 // Generated class from Pigeon that represents data sent in messages.
-class MsStorePurchaseResponse {
+class ProductPriceStruct {
  public:
+  // Constructs an object setting all non-nullable fields.
+  ProductPriceStruct();
+
   // Constructs an object setting all fields.
-  explicit MsStorePurchaseResponse(
-    const MsStorePurchaseStatus& status,
-    int64_t extended_error);
+  explicit ProductPriceStruct(
+    const std::string* formatted_price,
+    const std::string* currency_code,
+    const std::string* unformatted_price);
 
-  const MsStorePurchaseStatus& status() const;
-  void set_status(const MsStorePurchaseStatus& value_arg);
+  const std::string* formatted_price() const;
+  void set_formatted_price(const std::string_view* value_arg);
+  void set_formatted_price(std::string_view value_arg);
 
-  int64_t extended_error() const;
-  void set_extended_error(int64_t value_arg);
+  const std::string* currency_code() const;
+  void set_currency_code(const std::string_view* value_arg);
+  void set_currency_code(std::string_view value_arg);
 
-  bool operator==(const MsStorePurchaseResponse& other) const;
-  bool operator!=(const MsStorePurchaseResponse& other) const;
+  const std::string* unformatted_price() const;
+  void set_unformatted_price(const std::string_view* value_arg);
+  void set_unformatted_price(std::string_view value_arg);
+
+  bool operator==(const ProductPriceStruct& other) const;
+  bool operator!=(const ProductPriceStruct& other) const;
   /// Returns a hash code value for the object. This method is supported for the benefit of hash tables.
   size_t Hash() const;
  private:
-  static MsStorePurchaseResponse FromEncodableList(const ::flutter::EncodableList& list);
+  static ProductPriceStruct FromEncodableList(const ::flutter::EncodableList& list);
+  ::flutter::EncodableList ToEncodableList() const;
+  friend class ProductStruct;
+  friend class MsStoreHostApi;
+  friend class MsStoreFlutterApi;
+  friend class PigeonInternalCodecSerializer;
+  std::optional<std::string> formatted_price_;
+  std::optional<std::string> currency_code_;
+  std::optional<std::string> unformatted_price_;
+};
+
+
+// Generated class from Pigeon that represents data sent in messages.
+class ProductStruct {
+ public:
+  // Constructs an object setting all non-nullable fields.
+  ProductStruct();
+
+  // Constructs an object setting all fields.
+  explicit ProductStruct(
+    const std::string* store_id,
+    const std::string* title,
+    const std::string* description,
+    const std::string* product_kind,
+    const ProductPriceStruct* price,
+    const std::string* extended_json_data);
+
+  ~ProductStruct() = default;
+  ProductStruct(const ProductStruct& other);
+  ProductStruct& operator=(const ProductStruct& other);
+  ProductStruct(ProductStruct&& other) = default;
+  ProductStruct& operator=(ProductStruct&& other) noexcept = default;
+  const std::string* store_id() const;
+  void set_store_id(const std::string_view* value_arg);
+  void set_store_id(std::string_view value_arg);
+
+  const std::string* title() const;
+  void set_title(const std::string_view* value_arg);
+  void set_title(std::string_view value_arg);
+
+  const std::string* description() const;
+  void set_description(const std::string_view* value_arg);
+  void set_description(std::string_view value_arg);
+
+  const std::string* product_kind() const;
+  void set_product_kind(const std::string_view* value_arg);
+  void set_product_kind(std::string_view value_arg);
+
+  const ProductPriceStruct* price() const;
+  void set_price(const ProductPriceStruct* value_arg);
+  void set_price(const ProductPriceStruct& value_arg);
+
+  const std::string* extended_json_data() const;
+  void set_extended_json_data(const std::string_view* value_arg);
+  void set_extended_json_data(std::string_view value_arg);
+
+  bool operator==(const ProductStruct& other) const;
+  bool operator!=(const ProductStruct& other) const;
+  /// Returns a hash code value for the object. This method is supported for the benefit of hash tables.
+  size_t Hash() const;
+ private:
+  static ProductStruct FromEncodableList(const ::flutter::EncodableList& list);
+  ::flutter::EncodableList ToEncodableList() const;
+  friend class ProductResponseStruct;
+  friend class MsStoreHostApi;
+  friend class MsStoreFlutterApi;
+  friend class PigeonInternalCodecSerializer;
+  std::optional<std::string> store_id_;
+  std::optional<std::string> title_;
+  std::optional<std::string> description_;
+  std::optional<std::string> product_kind_;
+  std::unique_ptr<ProductPriceStruct> price_;
+  std::optional<std::string> extended_json_data_;
+};
+
+
+// Generated class from Pigeon that represents data sent in messages.
+class ProductResponseStruct {
+ public:
+  // Constructs an object setting all non-nullable fields.
+  ProductResponseStruct();
+
+  // Constructs an object setting all fields.
+  explicit ProductResponseStruct(
+    const ProductStruct* product,
+    const int64_t* extendeded_error);
+
+  ~ProductResponseStruct() = default;
+  ProductResponseStruct(const ProductResponseStruct& other);
+  ProductResponseStruct& operator=(const ProductResponseStruct& other);
+  ProductResponseStruct(ProductResponseStruct&& other) = default;
+  ProductResponseStruct& operator=(ProductResponseStruct&& other) noexcept = default;
+  const ProductStruct* product() const;
+  void set_product(const ProductStruct* value_arg);
+  void set_product(const ProductStruct& value_arg);
+
+  const int64_t* extendeded_error() const;
+  void set_extendeded_error(const int64_t* value_arg);
+  void set_extendeded_error(int64_t value_arg);
+
+  bool operator==(const ProductResponseStruct& other) const;
+  bool operator!=(const ProductResponseStruct& other) const;
+  /// Returns a hash code value for the object. This method is supported for the benefit of hash tables.
+  size_t Hash() const;
+ private:
+  static ProductResponseStruct FromEncodableList(const ::flutter::EncodableList& list);
   ::flutter::EncodableList ToEncodableList() const;
   friend class MsStoreHostApi;
   friend class MsStoreFlutterApi;
   friend class PigeonInternalCodecSerializer;
-  MsStorePurchaseStatus status_;
-  int64_t extended_error_;
+  std::unique_ptr<ProductStruct> product_;
+  std::optional<int64_t> extendeded_error_;
+};
+
+
+// Generated class from Pigeon that represents data sent in messages.
+class PurchaseResponseStruct {
+ public:
+  // Constructs an object setting all non-nullable fields.
+  PurchaseResponseStruct();
+
+  // Constructs an object setting all fields.
+  explicit PurchaseResponseStruct(
+    const int64_t* status,
+    const int64_t* extended_error);
+
+  const int64_t* status() const;
+  void set_status(const int64_t* value_arg);
+  void set_status(int64_t value_arg);
+
+  const int64_t* extended_error() const;
+  void set_extended_error(const int64_t* value_arg);
+  void set_extended_error(int64_t value_arg);
+
+  bool operator==(const PurchaseResponseStruct& other) const;
+  bool operator!=(const PurchaseResponseStruct& other) const;
+  /// Returns a hash code value for the object. This method is supported for the benefit of hash tables.
+  size_t Hash() const;
+ private:
+  static PurchaseResponseStruct FromEncodableList(const ::flutter::EncodableList& list);
+  ::flutter::EncodableList ToEncodableList() const;
+  friend class MsStoreHostApi;
+  friend class MsStoreFlutterApi;
+  friend class PigeonInternalCodecSerializer;
+  std::optional<int64_t> status_;
+  std::optional<int64_t> extended_error_;
 };
 
 
@@ -286,8 +329,9 @@ class MsStoreHostApi {
   MsStoreHostApi(const MsStoreHostApi&) = delete;
   MsStoreHostApi& operator=(const MsStoreHostApi&) = delete;
   virtual ~MsStoreHostApi() {}
-  virtual void GetStoreProductForCurrentApp(std::function<void(ErrorOr<MsStoreProductResponse> reply)> result) = 0;
-  virtual void RequestCurrentAppPurchase(std::function<void(ErrorOr<MsStorePurchaseResponse> reply)> result) = 0;
+  virtual void GetPackageFamilyName(std::function<void(ErrorOr<std::string> reply)> result) = 0;
+  virtual void GetStoreProductForCurrentApp(std::function<void(ErrorOr<ProductResponseStruct> reply)> result) = 0;
+  virtual void RequestCurrentAppPurchase(std::function<void(ErrorOr<PurchaseResponseStruct> reply)> result) = 0;
   virtual std::optional<FlutterError> RestoreCurrentAppLicense() = 0;
 
   // The codec used by MsStoreHostApi.
@@ -314,7 +358,7 @@ class MsStoreFlutterApi {
     const std::string& message_channel_suffix);
   static const ::flutter::StandardMessageCodec& GetCodec();
   void OnLicenseChanged(
-    const MsStoreAppLicense& license,
+    const AppLicenseStruct& license,
     std::function<void(void)>&& on_success,
     std::function<void(const FlutterError&)>&& on_error);
  private:

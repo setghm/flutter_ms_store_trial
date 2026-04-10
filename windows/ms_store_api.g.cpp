@@ -225,134 +225,192 @@ size_t PigeonInternalDeepHash(const ::flutter::EncodableValue& v) {
 }
 
 }  // namespace
-// MsStoreAppLicense
+// AppLicenseStruct
 
-MsStoreAppLicense::MsStoreAppLicense(
-  bool is_active,
-  bool is_trial,
-  bool is_trial_owned_by_this_user,
-  int64_t trial_time_remaining,
-  int64_t expiration_timestamp,
-  const std::string& sku_store_id,
-  const std::string& extended_json_data,
-  const std::string& trial_unique_id)
- : is_active_(is_active),
-    is_trial_(is_trial),
-    is_trial_owned_by_this_user_(is_trial_owned_by_this_user),
-    trial_time_remaining_(trial_time_remaining),
-    expiration_timestamp_(expiration_timestamp),
-    sku_store_id_(sku_store_id),
-    extended_json_data_(extended_json_data),
-    trial_unique_id_(trial_unique_id) {}
+AppLicenseStruct::AppLicenseStruct() {}
 
-bool MsStoreAppLicense::is_active() const {
-  return is_active_;
+AppLicenseStruct::AppLicenseStruct(
+  const bool* is_active,
+  const bool* is_trial,
+  const bool* is_trial_owned_by_this_user,
+  const int64_t* trial_time_remaining,
+  const int64_t* expiration_timestamp,
+  const std::string* sku_store_id,
+  const std::string* trial_unique_id,
+  const std::string* extended_json_data)
+ : is_active_(is_active ? std::optional<bool>(*is_active) : std::nullopt),
+    is_trial_(is_trial ? std::optional<bool>(*is_trial) : std::nullopt),
+    is_trial_owned_by_this_user_(is_trial_owned_by_this_user ? std::optional<bool>(*is_trial_owned_by_this_user) : std::nullopt),
+    trial_time_remaining_(trial_time_remaining ? std::optional<int64_t>(*trial_time_remaining) : std::nullopt),
+    expiration_timestamp_(expiration_timestamp ? std::optional<int64_t>(*expiration_timestamp) : std::nullopt),
+    sku_store_id_(sku_store_id ? std::optional<std::string>(*sku_store_id) : std::nullopt),
+    trial_unique_id_(trial_unique_id ? std::optional<std::string>(*trial_unique_id) : std::nullopt),
+    extended_json_data_(extended_json_data ? std::optional<std::string>(*extended_json_data) : std::nullopt) {}
+
+const bool* AppLicenseStruct::is_active() const {
+  return is_active_ ? &(*is_active_) : nullptr;
 }
 
-void MsStoreAppLicense::set_is_active(bool value_arg) {
+void AppLicenseStruct::set_is_active(const bool* value_arg) {
+  is_active_ = value_arg ? std::optional<bool>(*value_arg) : std::nullopt;
+}
+
+void AppLicenseStruct::set_is_active(bool value_arg) {
   is_active_ = value_arg;
 }
 
 
-bool MsStoreAppLicense::is_trial() const {
-  return is_trial_;
+const bool* AppLicenseStruct::is_trial() const {
+  return is_trial_ ? &(*is_trial_) : nullptr;
 }
 
-void MsStoreAppLicense::set_is_trial(bool value_arg) {
+void AppLicenseStruct::set_is_trial(const bool* value_arg) {
+  is_trial_ = value_arg ? std::optional<bool>(*value_arg) : std::nullopt;
+}
+
+void AppLicenseStruct::set_is_trial(bool value_arg) {
   is_trial_ = value_arg;
 }
 
 
-bool MsStoreAppLicense::is_trial_owned_by_this_user() const {
-  return is_trial_owned_by_this_user_;
+const bool* AppLicenseStruct::is_trial_owned_by_this_user() const {
+  return is_trial_owned_by_this_user_ ? &(*is_trial_owned_by_this_user_) : nullptr;
 }
 
-void MsStoreAppLicense::set_is_trial_owned_by_this_user(bool value_arg) {
+void AppLicenseStruct::set_is_trial_owned_by_this_user(const bool* value_arg) {
+  is_trial_owned_by_this_user_ = value_arg ? std::optional<bool>(*value_arg) : std::nullopt;
+}
+
+void AppLicenseStruct::set_is_trial_owned_by_this_user(bool value_arg) {
   is_trial_owned_by_this_user_ = value_arg;
 }
 
 
-int64_t MsStoreAppLicense::trial_time_remaining() const {
-  return trial_time_remaining_;
+const int64_t* AppLicenseStruct::trial_time_remaining() const {
+  return trial_time_remaining_ ? &(*trial_time_remaining_) : nullptr;
 }
 
-void MsStoreAppLicense::set_trial_time_remaining(int64_t value_arg) {
+void AppLicenseStruct::set_trial_time_remaining(const int64_t* value_arg) {
+  trial_time_remaining_ = value_arg ? std::optional<int64_t>(*value_arg) : std::nullopt;
+}
+
+void AppLicenseStruct::set_trial_time_remaining(int64_t value_arg) {
   trial_time_remaining_ = value_arg;
 }
 
 
-int64_t MsStoreAppLicense::expiration_timestamp() const {
-  return expiration_timestamp_;
+const int64_t* AppLicenseStruct::expiration_timestamp() const {
+  return expiration_timestamp_ ? &(*expiration_timestamp_) : nullptr;
 }
 
-void MsStoreAppLicense::set_expiration_timestamp(int64_t value_arg) {
+void AppLicenseStruct::set_expiration_timestamp(const int64_t* value_arg) {
+  expiration_timestamp_ = value_arg ? std::optional<int64_t>(*value_arg) : std::nullopt;
+}
+
+void AppLicenseStruct::set_expiration_timestamp(int64_t value_arg) {
   expiration_timestamp_ = value_arg;
 }
 
 
-const std::string& MsStoreAppLicense::sku_store_id() const {
-  return sku_store_id_;
+const std::string* AppLicenseStruct::sku_store_id() const {
+  return sku_store_id_ ? &(*sku_store_id_) : nullptr;
 }
 
-void MsStoreAppLicense::set_sku_store_id(std::string_view value_arg) {
+void AppLicenseStruct::set_sku_store_id(const std::string_view* value_arg) {
+  sku_store_id_ = value_arg ? std::optional<std::string>(*value_arg) : std::nullopt;
+}
+
+void AppLicenseStruct::set_sku_store_id(std::string_view value_arg) {
   sku_store_id_ = value_arg;
 }
 
 
-const std::string& MsStoreAppLicense::extended_json_data() const {
-  return extended_json_data_;
+const std::string* AppLicenseStruct::trial_unique_id() const {
+  return trial_unique_id_ ? &(*trial_unique_id_) : nullptr;
 }
 
-void MsStoreAppLicense::set_extended_json_data(std::string_view value_arg) {
-  extended_json_data_ = value_arg;
+void AppLicenseStruct::set_trial_unique_id(const std::string_view* value_arg) {
+  trial_unique_id_ = value_arg ? std::optional<std::string>(*value_arg) : std::nullopt;
 }
 
-
-const std::string& MsStoreAppLicense::trial_unique_id() const {
-  return trial_unique_id_;
-}
-
-void MsStoreAppLicense::set_trial_unique_id(std::string_view value_arg) {
+void AppLicenseStruct::set_trial_unique_id(std::string_view value_arg) {
   trial_unique_id_ = value_arg;
 }
 
 
-EncodableList MsStoreAppLicense::ToEncodableList() const {
+const std::string* AppLicenseStruct::extended_json_data() const {
+  return extended_json_data_ ? &(*extended_json_data_) : nullptr;
+}
+
+void AppLicenseStruct::set_extended_json_data(const std::string_view* value_arg) {
+  extended_json_data_ = value_arg ? std::optional<std::string>(*value_arg) : std::nullopt;
+}
+
+void AppLicenseStruct::set_extended_json_data(std::string_view value_arg) {
+  extended_json_data_ = value_arg;
+}
+
+
+EncodableList AppLicenseStruct::ToEncodableList() const {
   EncodableList list;
   list.reserve(8);
-  list.push_back(EncodableValue(is_active_));
-  list.push_back(EncodableValue(is_trial_));
-  list.push_back(EncodableValue(is_trial_owned_by_this_user_));
-  list.push_back(EncodableValue(trial_time_remaining_));
-  list.push_back(EncodableValue(expiration_timestamp_));
-  list.push_back(EncodableValue(sku_store_id_));
-  list.push_back(EncodableValue(extended_json_data_));
-  list.push_back(EncodableValue(trial_unique_id_));
+  list.push_back(is_active_ ? EncodableValue(*is_active_) : EncodableValue());
+  list.push_back(is_trial_ ? EncodableValue(*is_trial_) : EncodableValue());
+  list.push_back(is_trial_owned_by_this_user_ ? EncodableValue(*is_trial_owned_by_this_user_) : EncodableValue());
+  list.push_back(trial_time_remaining_ ? EncodableValue(*trial_time_remaining_) : EncodableValue());
+  list.push_back(expiration_timestamp_ ? EncodableValue(*expiration_timestamp_) : EncodableValue());
+  list.push_back(sku_store_id_ ? EncodableValue(*sku_store_id_) : EncodableValue());
+  list.push_back(trial_unique_id_ ? EncodableValue(*trial_unique_id_) : EncodableValue());
+  list.push_back(extended_json_data_ ? EncodableValue(*extended_json_data_) : EncodableValue());
   return list;
 }
 
-MsStoreAppLicense MsStoreAppLicense::FromEncodableList(const EncodableList& list) {
-  MsStoreAppLicense decoded(
-    std::get<bool>(list[0]),
-    std::get<bool>(list[1]),
-    std::get<bool>(list[2]),
-    std::get<int64_t>(list[3]),
-    std::get<int64_t>(list[4]),
-    std::get<std::string>(list[5]),
-    std::get<std::string>(list[6]),
-    std::get<std::string>(list[7]));
+AppLicenseStruct AppLicenseStruct::FromEncodableList(const EncodableList& list) {
+  AppLicenseStruct decoded;
+  auto& encodable_is_active = list[0];
+  if (!encodable_is_active.IsNull()) {
+    decoded.set_is_active(std::get<bool>(encodable_is_active));
+  }
+  auto& encodable_is_trial = list[1];
+  if (!encodable_is_trial.IsNull()) {
+    decoded.set_is_trial(std::get<bool>(encodable_is_trial));
+  }
+  auto& encodable_is_trial_owned_by_this_user = list[2];
+  if (!encodable_is_trial_owned_by_this_user.IsNull()) {
+    decoded.set_is_trial_owned_by_this_user(std::get<bool>(encodable_is_trial_owned_by_this_user));
+  }
+  auto& encodable_trial_time_remaining = list[3];
+  if (!encodable_trial_time_remaining.IsNull()) {
+    decoded.set_trial_time_remaining(std::get<int64_t>(encodable_trial_time_remaining));
+  }
+  auto& encodable_expiration_timestamp = list[4];
+  if (!encodable_expiration_timestamp.IsNull()) {
+    decoded.set_expiration_timestamp(std::get<int64_t>(encodable_expiration_timestamp));
+  }
+  auto& encodable_sku_store_id = list[5];
+  if (!encodable_sku_store_id.IsNull()) {
+    decoded.set_sku_store_id(std::get<std::string>(encodable_sku_store_id));
+  }
+  auto& encodable_trial_unique_id = list[6];
+  if (!encodable_trial_unique_id.IsNull()) {
+    decoded.set_trial_unique_id(std::get<std::string>(encodable_trial_unique_id));
+  }
+  auto& encodable_extended_json_data = list[7];
+  if (!encodable_extended_json_data.IsNull()) {
+    decoded.set_extended_json_data(std::get<std::string>(encodable_extended_json_data));
+  }
   return decoded;
 }
 
-bool MsStoreAppLicense::operator==(const MsStoreAppLicense& other) const {
-  return PigeonInternalDeepEquals(is_active_, other.is_active_) && PigeonInternalDeepEquals(is_trial_, other.is_trial_) && PigeonInternalDeepEquals(is_trial_owned_by_this_user_, other.is_trial_owned_by_this_user_) && PigeonInternalDeepEquals(trial_time_remaining_, other.trial_time_remaining_) && PigeonInternalDeepEquals(expiration_timestamp_, other.expiration_timestamp_) && PigeonInternalDeepEquals(sku_store_id_, other.sku_store_id_) && PigeonInternalDeepEquals(extended_json_data_, other.extended_json_data_) && PigeonInternalDeepEquals(trial_unique_id_, other.trial_unique_id_);
+bool AppLicenseStruct::operator==(const AppLicenseStruct& other) const {
+  return PigeonInternalDeepEquals(is_active_, other.is_active_) && PigeonInternalDeepEquals(is_trial_, other.is_trial_) && PigeonInternalDeepEquals(is_trial_owned_by_this_user_, other.is_trial_owned_by_this_user_) && PigeonInternalDeepEquals(trial_time_remaining_, other.trial_time_remaining_) && PigeonInternalDeepEquals(expiration_timestamp_, other.expiration_timestamp_) && PigeonInternalDeepEquals(sku_store_id_, other.sku_store_id_) && PigeonInternalDeepEquals(trial_unique_id_, other.trial_unique_id_) && PigeonInternalDeepEquals(extended_json_data_, other.extended_json_data_);
 }
 
-bool MsStoreAppLicense::operator!=(const MsStoreAppLicense& other) const {
+bool AppLicenseStruct::operator!=(const AppLicenseStruct& other) const {
   return !(*this == other);
 }
 
-size_t MsStoreAppLicense::Hash() const {
+size_t AppLicenseStruct::Hash() const {
   size_t result = 1;
   result = result * 31 + PigeonInternalDeepHash(is_active_);
   result = result * 31 + PigeonInternalDeepHash(is_trial_);
@@ -360,296 +418,449 @@ size_t MsStoreAppLicense::Hash() const {
   result = result * 31 + PigeonInternalDeepHash(trial_time_remaining_);
   result = result * 31 + PigeonInternalDeepHash(expiration_timestamp_);
   result = result * 31 + PigeonInternalDeepHash(sku_store_id_);
-  result = result * 31 + PigeonInternalDeepHash(extended_json_data_);
   result = result * 31 + PigeonInternalDeepHash(trial_unique_id_);
+  result = result * 31 + PigeonInternalDeepHash(extended_json_data_);
   return result;
 }
 
-size_t PigeonInternalDeepHash(const MsStoreAppLicense& v) {
+size_t PigeonInternalDeepHash(const AppLicenseStruct& v) {
   return v.Hash();
 }
 
-// MsStoreProduct
+// ProductPriceStruct
 
-MsStoreProduct::MsStoreProduct(
-  const std::string& store_id,
-  const std::string& title,
-  const std::string& description,
-  const std::string& price,
-  const std::string& price_currency_code,
-  const std::string& formatted_price,
-  const std::string& product_kind,
-  const std::string& extended_json_data)
- : store_id_(store_id),
-    title_(title),
-    description_(description),
-    price_(price),
-    price_currency_code_(price_currency_code),
-    formatted_price_(formatted_price),
-    product_kind_(product_kind),
-    extended_json_data_(extended_json_data) {}
+ProductPriceStruct::ProductPriceStruct() {}
 
-const std::string& MsStoreProduct::store_id() const {
-  return store_id_;
+ProductPriceStruct::ProductPriceStruct(
+  const std::string* formatted_price,
+  const std::string* currency_code,
+  const std::string* unformatted_price)
+ : formatted_price_(formatted_price ? std::optional<std::string>(*formatted_price) : std::nullopt),
+    currency_code_(currency_code ? std::optional<std::string>(*currency_code) : std::nullopt),
+    unformatted_price_(unformatted_price ? std::optional<std::string>(*unformatted_price) : std::nullopt) {}
+
+const std::string* ProductPriceStruct::formatted_price() const {
+  return formatted_price_ ? &(*formatted_price_) : nullptr;
 }
 
-void MsStoreProduct::set_store_id(std::string_view value_arg) {
-  store_id_ = value_arg;
+void ProductPriceStruct::set_formatted_price(const std::string_view* value_arg) {
+  formatted_price_ = value_arg ? std::optional<std::string>(*value_arg) : std::nullopt;
 }
 
-
-const std::string& MsStoreProduct::title() const {
-  return title_;
-}
-
-void MsStoreProduct::set_title(std::string_view value_arg) {
-  title_ = value_arg;
-}
-
-
-const std::string& MsStoreProduct::description() const {
-  return description_;
-}
-
-void MsStoreProduct::set_description(std::string_view value_arg) {
-  description_ = value_arg;
-}
-
-
-const std::string& MsStoreProduct::price() const {
-  return price_;
-}
-
-void MsStoreProduct::set_price(std::string_view value_arg) {
-  price_ = value_arg;
-}
-
-
-const std::string& MsStoreProduct::price_currency_code() const {
-  return price_currency_code_;
-}
-
-void MsStoreProduct::set_price_currency_code(std::string_view value_arg) {
-  price_currency_code_ = value_arg;
-}
-
-
-const std::string& MsStoreProduct::formatted_price() const {
-  return formatted_price_;
-}
-
-void MsStoreProduct::set_formatted_price(std::string_view value_arg) {
+void ProductPriceStruct::set_formatted_price(std::string_view value_arg) {
   formatted_price_ = value_arg;
 }
 
 
-const std::string& MsStoreProduct::product_kind() const {
-  return product_kind_;
+const std::string* ProductPriceStruct::currency_code() const {
+  return currency_code_ ? &(*currency_code_) : nullptr;
 }
 
-void MsStoreProduct::set_product_kind(std::string_view value_arg) {
-  product_kind_ = value_arg;
+void ProductPriceStruct::set_currency_code(const std::string_view* value_arg) {
+  currency_code_ = value_arg ? std::optional<std::string>(*value_arg) : std::nullopt;
 }
 
-
-const std::string& MsStoreProduct::extended_json_data() const {
-  return extended_json_data_;
-}
-
-void MsStoreProduct::set_extended_json_data(std::string_view value_arg) {
-  extended_json_data_ = value_arg;
+void ProductPriceStruct::set_currency_code(std::string_view value_arg) {
+  currency_code_ = value_arg;
 }
 
 
-EncodableList MsStoreProduct::ToEncodableList() const {
+const std::string* ProductPriceStruct::unformatted_price() const {
+  return unformatted_price_ ? &(*unformatted_price_) : nullptr;
+}
+
+void ProductPriceStruct::set_unformatted_price(const std::string_view* value_arg) {
+  unformatted_price_ = value_arg ? std::optional<std::string>(*value_arg) : std::nullopt;
+}
+
+void ProductPriceStruct::set_unformatted_price(std::string_view value_arg) {
+  unformatted_price_ = value_arg;
+}
+
+
+EncodableList ProductPriceStruct::ToEncodableList() const {
   EncodableList list;
-  list.reserve(8);
-  list.push_back(EncodableValue(store_id_));
-  list.push_back(EncodableValue(title_));
-  list.push_back(EncodableValue(description_));
-  list.push_back(EncodableValue(price_));
-  list.push_back(EncodableValue(price_currency_code_));
-  list.push_back(EncodableValue(formatted_price_));
-  list.push_back(EncodableValue(product_kind_));
-  list.push_back(EncodableValue(extended_json_data_));
+  list.reserve(3);
+  list.push_back(formatted_price_ ? EncodableValue(*formatted_price_) : EncodableValue());
+  list.push_back(currency_code_ ? EncodableValue(*currency_code_) : EncodableValue());
+  list.push_back(unformatted_price_ ? EncodableValue(*unformatted_price_) : EncodableValue());
   return list;
 }
 
-MsStoreProduct MsStoreProduct::FromEncodableList(const EncodableList& list) {
-  MsStoreProduct decoded(
-    std::get<std::string>(list[0]),
-    std::get<std::string>(list[1]),
-    std::get<std::string>(list[2]),
-    std::get<std::string>(list[3]),
-    std::get<std::string>(list[4]),
-    std::get<std::string>(list[5]),
-    std::get<std::string>(list[6]),
-    std::get<std::string>(list[7]));
-  return decoded;
-}
-
-bool MsStoreProduct::operator==(const MsStoreProduct& other) const {
-  return PigeonInternalDeepEquals(store_id_, other.store_id_) && PigeonInternalDeepEquals(title_, other.title_) && PigeonInternalDeepEquals(description_, other.description_) && PigeonInternalDeepEquals(price_, other.price_) && PigeonInternalDeepEquals(price_currency_code_, other.price_currency_code_) && PigeonInternalDeepEquals(formatted_price_, other.formatted_price_) && PigeonInternalDeepEquals(product_kind_, other.product_kind_) && PigeonInternalDeepEquals(extended_json_data_, other.extended_json_data_);
-}
-
-bool MsStoreProduct::operator!=(const MsStoreProduct& other) const {
-  return !(*this == other);
-}
-
-size_t MsStoreProduct::Hash() const {
-  size_t result = 1;
-  result = result * 31 + PigeonInternalDeepHash(store_id_);
-  result = result * 31 + PigeonInternalDeepHash(title_);
-  result = result * 31 + PigeonInternalDeepHash(description_);
-  result = result * 31 + PigeonInternalDeepHash(price_);
-  result = result * 31 + PigeonInternalDeepHash(price_currency_code_);
-  result = result * 31 + PigeonInternalDeepHash(formatted_price_);
-  result = result * 31 + PigeonInternalDeepHash(product_kind_);
-  result = result * 31 + PigeonInternalDeepHash(extended_json_data_);
-  return result;
-}
-
-size_t PigeonInternalDeepHash(const MsStoreProduct& v) {
-  return v.Hash();
-}
-
-// MsStoreProductResponse
-
-MsStoreProductResponse::MsStoreProductResponse(int64_t extended_error)
- : extended_error_(extended_error) {}
-
-MsStoreProductResponse::MsStoreProductResponse(
-  const MsStoreProduct* product,
-  int64_t extended_error)
- : product_(product ? std::make_unique<MsStoreProduct>(*product) : nullptr),
-    extended_error_(extended_error) {}
-
-MsStoreProductResponse::MsStoreProductResponse(const MsStoreProductResponse& other)
- : product_(other.product_ ? std::make_unique<MsStoreProduct>(*other.product_) : nullptr),
-    extended_error_(other.extended_error_) {}
-
-MsStoreProductResponse& MsStoreProductResponse::operator=(const MsStoreProductResponse& other) {
-  product_ = other.product_ ? std::make_unique<MsStoreProduct>(*other.product_) : nullptr;
-  extended_error_ = other.extended_error_;
-  return *this;
-}
-
-const MsStoreProduct* MsStoreProductResponse::product() const {
-  return product_.get();
-}
-
-void MsStoreProductResponse::set_product(const MsStoreProduct* value_arg) {
-  product_ = value_arg ? std::make_unique<MsStoreProduct>(*value_arg) : nullptr;
-}
-
-void MsStoreProductResponse::set_product(const MsStoreProduct& value_arg) {
-  product_ = std::make_unique<MsStoreProduct>(value_arg);
-}
-
-
-int64_t MsStoreProductResponse::extended_error() const {
-  return extended_error_;
-}
-
-void MsStoreProductResponse::set_extended_error(int64_t value_arg) {
-  extended_error_ = value_arg;
-}
-
-
-EncodableList MsStoreProductResponse::ToEncodableList() const {
-  EncodableList list;
-  list.reserve(2);
-  list.push_back(product_ ? CustomEncodableValue(*product_) : EncodableValue());
-  list.push_back(EncodableValue(extended_error_));
-  return list;
-}
-
-MsStoreProductResponse MsStoreProductResponse::FromEncodableList(const EncodableList& list) {
-  MsStoreProductResponse decoded(
-    std::get<int64_t>(list[1]));
-  auto& encodable_product = list[0];
-  if (!encodable_product.IsNull()) {
-    decoded.set_product(std::any_cast<const MsStoreProduct&>(std::get<CustomEncodableValue>(encodable_product)));
+ProductPriceStruct ProductPriceStruct::FromEncodableList(const EncodableList& list) {
+  ProductPriceStruct decoded;
+  auto& encodable_formatted_price = list[0];
+  if (!encodable_formatted_price.IsNull()) {
+    decoded.set_formatted_price(std::get<std::string>(encodable_formatted_price));
+  }
+  auto& encodable_currency_code = list[1];
+  if (!encodable_currency_code.IsNull()) {
+    decoded.set_currency_code(std::get<std::string>(encodable_currency_code));
+  }
+  auto& encodable_unformatted_price = list[2];
+  if (!encodable_unformatted_price.IsNull()) {
+    decoded.set_unformatted_price(std::get<std::string>(encodable_unformatted_price));
   }
   return decoded;
 }
 
-bool MsStoreProductResponse::operator==(const MsStoreProductResponse& other) const {
-  return PigeonInternalDeepEquals(product_, other.product_) && PigeonInternalDeepEquals(extended_error_, other.extended_error_);
+bool ProductPriceStruct::operator==(const ProductPriceStruct& other) const {
+  return PigeonInternalDeepEquals(formatted_price_, other.formatted_price_) && PigeonInternalDeepEquals(currency_code_, other.currency_code_) && PigeonInternalDeepEquals(unformatted_price_, other.unformatted_price_);
 }
 
-bool MsStoreProductResponse::operator!=(const MsStoreProductResponse& other) const {
+bool ProductPriceStruct::operator!=(const ProductPriceStruct& other) const {
   return !(*this == other);
 }
 
-size_t MsStoreProductResponse::Hash() const {
+size_t ProductPriceStruct::Hash() const {
   size_t result = 1;
-  result = result * 31 + PigeonInternalDeepHash(product_);
-  result = result * 31 + PigeonInternalDeepHash(extended_error_);
+  result = result * 31 + PigeonInternalDeepHash(formatted_price_);
+  result = result * 31 + PigeonInternalDeepHash(currency_code_);
+  result = result * 31 + PigeonInternalDeepHash(unformatted_price_);
   return result;
 }
 
-size_t PigeonInternalDeepHash(const MsStoreProductResponse& v) {
+size_t PigeonInternalDeepHash(const ProductPriceStruct& v) {
   return v.Hash();
 }
 
-// MsStorePurchaseResponse
+// ProductStruct
 
-MsStorePurchaseResponse::MsStorePurchaseResponse(
-  const MsStorePurchaseStatus& status,
-  int64_t extended_error)
- : status_(status),
-    extended_error_(extended_error) {}
+ProductStruct::ProductStruct() {}
 
-const MsStorePurchaseStatus& MsStorePurchaseResponse::status() const {
-  return status_;
+ProductStruct::ProductStruct(
+  const std::string* store_id,
+  const std::string* title,
+  const std::string* description,
+  const std::string* product_kind,
+  const ProductPriceStruct* price,
+  const std::string* extended_json_data)
+ : store_id_(store_id ? std::optional<std::string>(*store_id) : std::nullopt),
+    title_(title ? std::optional<std::string>(*title) : std::nullopt),
+    description_(description ? std::optional<std::string>(*description) : std::nullopt),
+    product_kind_(product_kind ? std::optional<std::string>(*product_kind) : std::nullopt),
+    price_(price ? std::make_unique<ProductPriceStruct>(*price) : nullptr),
+    extended_json_data_(extended_json_data ? std::optional<std::string>(*extended_json_data) : std::nullopt) {}
+
+ProductStruct::ProductStruct(const ProductStruct& other)
+ : store_id_(other.store_id_ ? std::optional<std::string>(*other.store_id_) : std::nullopt),
+    title_(other.title_ ? std::optional<std::string>(*other.title_) : std::nullopt),
+    description_(other.description_ ? std::optional<std::string>(*other.description_) : std::nullopt),
+    product_kind_(other.product_kind_ ? std::optional<std::string>(*other.product_kind_) : std::nullopt),
+    price_(other.price_ ? std::make_unique<ProductPriceStruct>(*other.price_) : nullptr),
+    extended_json_data_(other.extended_json_data_ ? std::optional<std::string>(*other.extended_json_data_) : std::nullopt) {}
+
+ProductStruct& ProductStruct::operator=(const ProductStruct& other) {
+  store_id_ = other.store_id_;
+  title_ = other.title_;
+  description_ = other.description_;
+  product_kind_ = other.product_kind_;
+  price_ = other.price_ ? std::make_unique<ProductPriceStruct>(*other.price_) : nullptr;
+  extended_json_data_ = other.extended_json_data_;
+  return *this;
 }
 
-void MsStorePurchaseResponse::set_status(const MsStorePurchaseStatus& value_arg) {
+const std::string* ProductStruct::store_id() const {
+  return store_id_ ? &(*store_id_) : nullptr;
+}
+
+void ProductStruct::set_store_id(const std::string_view* value_arg) {
+  store_id_ = value_arg ? std::optional<std::string>(*value_arg) : std::nullopt;
+}
+
+void ProductStruct::set_store_id(std::string_view value_arg) {
+  store_id_ = value_arg;
+}
+
+
+const std::string* ProductStruct::title() const {
+  return title_ ? &(*title_) : nullptr;
+}
+
+void ProductStruct::set_title(const std::string_view* value_arg) {
+  title_ = value_arg ? std::optional<std::string>(*value_arg) : std::nullopt;
+}
+
+void ProductStruct::set_title(std::string_view value_arg) {
+  title_ = value_arg;
+}
+
+
+const std::string* ProductStruct::description() const {
+  return description_ ? &(*description_) : nullptr;
+}
+
+void ProductStruct::set_description(const std::string_view* value_arg) {
+  description_ = value_arg ? std::optional<std::string>(*value_arg) : std::nullopt;
+}
+
+void ProductStruct::set_description(std::string_view value_arg) {
+  description_ = value_arg;
+}
+
+
+const std::string* ProductStruct::product_kind() const {
+  return product_kind_ ? &(*product_kind_) : nullptr;
+}
+
+void ProductStruct::set_product_kind(const std::string_view* value_arg) {
+  product_kind_ = value_arg ? std::optional<std::string>(*value_arg) : std::nullopt;
+}
+
+void ProductStruct::set_product_kind(std::string_view value_arg) {
+  product_kind_ = value_arg;
+}
+
+
+const ProductPriceStruct* ProductStruct::price() const {
+  return price_.get();
+}
+
+void ProductStruct::set_price(const ProductPriceStruct* value_arg) {
+  price_ = value_arg ? std::make_unique<ProductPriceStruct>(*value_arg) : nullptr;
+}
+
+void ProductStruct::set_price(const ProductPriceStruct& value_arg) {
+  price_ = std::make_unique<ProductPriceStruct>(value_arg);
+}
+
+
+const std::string* ProductStruct::extended_json_data() const {
+  return extended_json_data_ ? &(*extended_json_data_) : nullptr;
+}
+
+void ProductStruct::set_extended_json_data(const std::string_view* value_arg) {
+  extended_json_data_ = value_arg ? std::optional<std::string>(*value_arg) : std::nullopt;
+}
+
+void ProductStruct::set_extended_json_data(std::string_view value_arg) {
+  extended_json_data_ = value_arg;
+}
+
+
+EncodableList ProductStruct::ToEncodableList() const {
+  EncodableList list;
+  list.reserve(6);
+  list.push_back(store_id_ ? EncodableValue(*store_id_) : EncodableValue());
+  list.push_back(title_ ? EncodableValue(*title_) : EncodableValue());
+  list.push_back(description_ ? EncodableValue(*description_) : EncodableValue());
+  list.push_back(product_kind_ ? EncodableValue(*product_kind_) : EncodableValue());
+  list.push_back(price_ ? CustomEncodableValue(*price_) : EncodableValue());
+  list.push_back(extended_json_data_ ? EncodableValue(*extended_json_data_) : EncodableValue());
+  return list;
+}
+
+ProductStruct ProductStruct::FromEncodableList(const EncodableList& list) {
+  ProductStruct decoded;
+  auto& encodable_store_id = list[0];
+  if (!encodable_store_id.IsNull()) {
+    decoded.set_store_id(std::get<std::string>(encodable_store_id));
+  }
+  auto& encodable_title = list[1];
+  if (!encodable_title.IsNull()) {
+    decoded.set_title(std::get<std::string>(encodable_title));
+  }
+  auto& encodable_description = list[2];
+  if (!encodable_description.IsNull()) {
+    decoded.set_description(std::get<std::string>(encodable_description));
+  }
+  auto& encodable_product_kind = list[3];
+  if (!encodable_product_kind.IsNull()) {
+    decoded.set_product_kind(std::get<std::string>(encodable_product_kind));
+  }
+  auto& encodable_price = list[4];
+  if (!encodable_price.IsNull()) {
+    decoded.set_price(std::any_cast<const ProductPriceStruct&>(std::get<CustomEncodableValue>(encodable_price)));
+  }
+  auto& encodable_extended_json_data = list[5];
+  if (!encodable_extended_json_data.IsNull()) {
+    decoded.set_extended_json_data(std::get<std::string>(encodable_extended_json_data));
+  }
+  return decoded;
+}
+
+bool ProductStruct::operator==(const ProductStruct& other) const {
+  return PigeonInternalDeepEquals(store_id_, other.store_id_) && PigeonInternalDeepEquals(title_, other.title_) && PigeonInternalDeepEquals(description_, other.description_) && PigeonInternalDeepEquals(product_kind_, other.product_kind_) && PigeonInternalDeepEquals(price_, other.price_) && PigeonInternalDeepEquals(extended_json_data_, other.extended_json_data_);
+}
+
+bool ProductStruct::operator!=(const ProductStruct& other) const {
+  return !(*this == other);
+}
+
+size_t ProductStruct::Hash() const {
+  size_t result = 1;
+  result = result * 31 + PigeonInternalDeepHash(store_id_);
+  result = result * 31 + PigeonInternalDeepHash(title_);
+  result = result * 31 + PigeonInternalDeepHash(description_);
+  result = result * 31 + PigeonInternalDeepHash(product_kind_);
+  result = result * 31 + PigeonInternalDeepHash(price_);
+  result = result * 31 + PigeonInternalDeepHash(extended_json_data_);
+  return result;
+}
+
+size_t PigeonInternalDeepHash(const ProductStruct& v) {
+  return v.Hash();
+}
+
+// ProductResponseStruct
+
+ProductResponseStruct::ProductResponseStruct() {}
+
+ProductResponseStruct::ProductResponseStruct(
+  const ProductStruct* product,
+  const int64_t* extendeded_error)
+ : product_(product ? std::make_unique<ProductStruct>(*product) : nullptr),
+    extendeded_error_(extendeded_error ? std::optional<int64_t>(*extendeded_error) : std::nullopt) {}
+
+ProductResponseStruct::ProductResponseStruct(const ProductResponseStruct& other)
+ : product_(other.product_ ? std::make_unique<ProductStruct>(*other.product_) : nullptr),
+    extendeded_error_(other.extendeded_error_ ? std::optional<int64_t>(*other.extendeded_error_) : std::nullopt) {}
+
+ProductResponseStruct& ProductResponseStruct::operator=(const ProductResponseStruct& other) {
+  product_ = other.product_ ? std::make_unique<ProductStruct>(*other.product_) : nullptr;
+  extendeded_error_ = other.extendeded_error_;
+  return *this;
+}
+
+const ProductStruct* ProductResponseStruct::product() const {
+  return product_.get();
+}
+
+void ProductResponseStruct::set_product(const ProductStruct* value_arg) {
+  product_ = value_arg ? std::make_unique<ProductStruct>(*value_arg) : nullptr;
+}
+
+void ProductResponseStruct::set_product(const ProductStruct& value_arg) {
+  product_ = std::make_unique<ProductStruct>(value_arg);
+}
+
+
+const int64_t* ProductResponseStruct::extendeded_error() const {
+  return extendeded_error_ ? &(*extendeded_error_) : nullptr;
+}
+
+void ProductResponseStruct::set_extendeded_error(const int64_t* value_arg) {
+  extendeded_error_ = value_arg ? std::optional<int64_t>(*value_arg) : std::nullopt;
+}
+
+void ProductResponseStruct::set_extendeded_error(int64_t value_arg) {
+  extendeded_error_ = value_arg;
+}
+
+
+EncodableList ProductResponseStruct::ToEncodableList() const {
+  EncodableList list;
+  list.reserve(2);
+  list.push_back(product_ ? CustomEncodableValue(*product_) : EncodableValue());
+  list.push_back(extendeded_error_ ? EncodableValue(*extendeded_error_) : EncodableValue());
+  return list;
+}
+
+ProductResponseStruct ProductResponseStruct::FromEncodableList(const EncodableList& list) {
+  ProductResponseStruct decoded;
+  auto& encodable_product = list[0];
+  if (!encodable_product.IsNull()) {
+    decoded.set_product(std::any_cast<const ProductStruct&>(std::get<CustomEncodableValue>(encodable_product)));
+  }
+  auto& encodable_extendeded_error = list[1];
+  if (!encodable_extendeded_error.IsNull()) {
+    decoded.set_extendeded_error(std::get<int64_t>(encodable_extendeded_error));
+  }
+  return decoded;
+}
+
+bool ProductResponseStruct::operator==(const ProductResponseStruct& other) const {
+  return PigeonInternalDeepEquals(product_, other.product_) && PigeonInternalDeepEquals(extendeded_error_, other.extendeded_error_);
+}
+
+bool ProductResponseStruct::operator!=(const ProductResponseStruct& other) const {
+  return !(*this == other);
+}
+
+size_t ProductResponseStruct::Hash() const {
+  size_t result = 1;
+  result = result * 31 + PigeonInternalDeepHash(product_);
+  result = result * 31 + PigeonInternalDeepHash(extendeded_error_);
+  return result;
+}
+
+size_t PigeonInternalDeepHash(const ProductResponseStruct& v) {
+  return v.Hash();
+}
+
+// PurchaseResponseStruct
+
+PurchaseResponseStruct::PurchaseResponseStruct() {}
+
+PurchaseResponseStruct::PurchaseResponseStruct(
+  const int64_t* status,
+  const int64_t* extended_error)
+ : status_(status ? std::optional<int64_t>(*status) : std::nullopt),
+    extended_error_(extended_error ? std::optional<int64_t>(*extended_error) : std::nullopt) {}
+
+const int64_t* PurchaseResponseStruct::status() const {
+  return status_ ? &(*status_) : nullptr;
+}
+
+void PurchaseResponseStruct::set_status(const int64_t* value_arg) {
+  status_ = value_arg ? std::optional<int64_t>(*value_arg) : std::nullopt;
+}
+
+void PurchaseResponseStruct::set_status(int64_t value_arg) {
   status_ = value_arg;
 }
 
 
-int64_t MsStorePurchaseResponse::extended_error() const {
-  return extended_error_;
+const int64_t* PurchaseResponseStruct::extended_error() const {
+  return extended_error_ ? &(*extended_error_) : nullptr;
 }
 
-void MsStorePurchaseResponse::set_extended_error(int64_t value_arg) {
+void PurchaseResponseStruct::set_extended_error(const int64_t* value_arg) {
+  extended_error_ = value_arg ? std::optional<int64_t>(*value_arg) : std::nullopt;
+}
+
+void PurchaseResponseStruct::set_extended_error(int64_t value_arg) {
   extended_error_ = value_arg;
 }
 
 
-EncodableList MsStorePurchaseResponse::ToEncodableList() const {
+EncodableList PurchaseResponseStruct::ToEncodableList() const {
   EncodableList list;
   list.reserve(2);
-  list.push_back(CustomEncodableValue(status_));
-  list.push_back(EncodableValue(extended_error_));
+  list.push_back(status_ ? EncodableValue(*status_) : EncodableValue());
+  list.push_back(extended_error_ ? EncodableValue(*extended_error_) : EncodableValue());
   return list;
 }
 
-MsStorePurchaseResponse MsStorePurchaseResponse::FromEncodableList(const EncodableList& list) {
-  MsStorePurchaseResponse decoded(
-    std::any_cast<const MsStorePurchaseStatus&>(std::get<CustomEncodableValue>(list[0])),
-    std::get<int64_t>(list[1]));
+PurchaseResponseStruct PurchaseResponseStruct::FromEncodableList(const EncodableList& list) {
+  PurchaseResponseStruct decoded;
+  auto& encodable_status = list[0];
+  if (!encodable_status.IsNull()) {
+    decoded.set_status(std::get<int64_t>(encodable_status));
+  }
+  auto& encodable_extended_error = list[1];
+  if (!encodable_extended_error.IsNull()) {
+    decoded.set_extended_error(std::get<int64_t>(encodable_extended_error));
+  }
   return decoded;
 }
 
-bool MsStorePurchaseResponse::operator==(const MsStorePurchaseResponse& other) const {
+bool PurchaseResponseStruct::operator==(const PurchaseResponseStruct& other) const {
   return PigeonInternalDeepEquals(status_, other.status_) && PigeonInternalDeepEquals(extended_error_, other.extended_error_);
 }
 
-bool MsStorePurchaseResponse::operator!=(const MsStorePurchaseResponse& other) const {
+bool PurchaseResponseStruct::operator!=(const PurchaseResponseStruct& other) const {
   return !(*this == other);
 }
 
-size_t MsStorePurchaseResponse::Hash() const {
+size_t PurchaseResponseStruct::Hash() const {
   size_t result = 1;
   result = result * 31 + PigeonInternalDeepHash(status_);
   result = result * 31 + PigeonInternalDeepHash(extended_error_);
   return result;
 }
 
-size_t PigeonInternalDeepHash(const MsStorePurchaseResponse& v) {
+size_t PigeonInternalDeepHash(const PurchaseResponseStruct& v) {
   return v.Hash();
 }
 
@@ -661,21 +872,19 @@ EncodableValue PigeonInternalCodecSerializer::ReadValueOfType(
   ::flutter::ByteStreamReader* stream) const {
   switch (type) {
     case 129: {
-        const auto& encodable_enum_arg = ReadValue(stream);
-        const int64_t enum_arg_value = encodable_enum_arg.IsNull() ? 0 : encodable_enum_arg.LongValue();
-        return encodable_enum_arg.IsNull() ? EncodableValue() : CustomEncodableValue(static_cast<MsStorePurchaseStatus>(enum_arg_value));
+        return CustomEncodableValue(AppLicenseStruct::FromEncodableList(std::get<EncodableList>(ReadValue(stream))));
       }
     case 130: {
-        return CustomEncodableValue(MsStoreAppLicense::FromEncodableList(std::get<EncodableList>(ReadValue(stream))));
+        return CustomEncodableValue(ProductPriceStruct::FromEncodableList(std::get<EncodableList>(ReadValue(stream))));
       }
     case 131: {
-        return CustomEncodableValue(MsStoreProduct::FromEncodableList(std::get<EncodableList>(ReadValue(stream))));
+        return CustomEncodableValue(ProductStruct::FromEncodableList(std::get<EncodableList>(ReadValue(stream))));
       }
     case 132: {
-        return CustomEncodableValue(MsStoreProductResponse::FromEncodableList(std::get<EncodableList>(ReadValue(stream))));
+        return CustomEncodableValue(ProductResponseStruct::FromEncodableList(std::get<EncodableList>(ReadValue(stream))));
       }
     case 133: {
-        return CustomEncodableValue(MsStorePurchaseResponse::FromEncodableList(std::get<EncodableList>(ReadValue(stream))));
+        return CustomEncodableValue(PurchaseResponseStruct::FromEncodableList(std::get<EncodableList>(ReadValue(stream))));
       }
     default:
       return ::flutter::StandardCodecSerializer::ReadValueOfType(type, stream);
@@ -686,29 +895,29 @@ void PigeonInternalCodecSerializer::WriteValue(
   const EncodableValue& value,
   ::flutter::ByteStreamWriter* stream) const {
   if (const CustomEncodableValue* custom_value = std::get_if<CustomEncodableValue>(&value)) {
-    if (custom_value->type() == typeid(MsStorePurchaseStatus)) {
+    if (custom_value->type() == typeid(AppLicenseStruct)) {
       stream->WriteByte(129);
-      WriteValue(EncodableValue(static_cast<int>(std::any_cast<MsStorePurchaseStatus>(*custom_value))), stream);
+      WriteValue(EncodableValue(std::any_cast<AppLicenseStruct>(*custom_value).ToEncodableList()), stream);
       return;
     }
-    if (custom_value->type() == typeid(MsStoreAppLicense)) {
+    if (custom_value->type() == typeid(ProductPriceStruct)) {
       stream->WriteByte(130);
-      WriteValue(EncodableValue(std::any_cast<MsStoreAppLicense>(*custom_value).ToEncodableList()), stream);
+      WriteValue(EncodableValue(std::any_cast<ProductPriceStruct>(*custom_value).ToEncodableList()), stream);
       return;
     }
-    if (custom_value->type() == typeid(MsStoreProduct)) {
+    if (custom_value->type() == typeid(ProductStruct)) {
       stream->WriteByte(131);
-      WriteValue(EncodableValue(std::any_cast<MsStoreProduct>(*custom_value).ToEncodableList()), stream);
+      WriteValue(EncodableValue(std::any_cast<ProductStruct>(*custom_value).ToEncodableList()), stream);
       return;
     }
-    if (custom_value->type() == typeid(MsStoreProductResponse)) {
+    if (custom_value->type() == typeid(ProductResponseStruct)) {
       stream->WriteByte(132);
-      WriteValue(EncodableValue(std::any_cast<MsStoreProductResponse>(*custom_value).ToEncodableList()), stream);
+      WriteValue(EncodableValue(std::any_cast<ProductResponseStruct>(*custom_value).ToEncodableList()), stream);
       return;
     }
-    if (custom_value->type() == typeid(MsStorePurchaseResponse)) {
+    if (custom_value->type() == typeid(PurchaseResponseStruct)) {
       stream->WriteByte(133);
-      WriteValue(EncodableValue(std::any_cast<MsStorePurchaseResponse>(*custom_value).ToEncodableList()), stream);
+      WriteValue(EncodableValue(std::any_cast<PurchaseResponseStruct>(*custom_value).ToEncodableList()), stream);
       return;
     }
   }
@@ -733,11 +942,33 @@ void MsStoreHostApi::SetUp(
   const std::string& message_channel_suffix) {
   const std::string prepended_suffix = message_channel_suffix.length() > 0 ? std::string(".") + message_channel_suffix : "";
   {
+    BasicMessageChannel<> channel(binary_messenger, "dev.flutter.pigeon.ms_store_trial.MsStoreHostApi.getPackageFamilyName" + prepended_suffix, &GetCodec());
+    if (api != nullptr) {
+      channel.SetMessageHandler([api](const EncodableValue& message, const ::flutter::MessageReply<EncodableValue>& reply) {
+        try {
+          api->GetPackageFamilyName([reply](ErrorOr<std::string>&& output) {
+            if (output.has_error()) {
+              reply(WrapError(output.error()));
+              return;
+            }
+            EncodableList wrapped;
+            wrapped.push_back(EncodableValue(std::move(output).TakeValue()));
+            reply(EncodableValue(std::move(wrapped)));
+          });
+        } catch (const std::exception& exception) {
+          reply(WrapError(exception.what()));
+        }
+      });
+    } else {
+      channel.SetMessageHandler(nullptr);
+    }
+  }
+  {
     BasicMessageChannel<> channel(binary_messenger, "dev.flutter.pigeon.ms_store_trial.MsStoreHostApi.getStoreProductForCurrentApp" + prepended_suffix, &GetCodec());
     if (api != nullptr) {
       channel.SetMessageHandler([api](const EncodableValue& message, const ::flutter::MessageReply<EncodableValue>& reply) {
         try {
-          api->GetStoreProductForCurrentApp([reply](ErrorOr<MsStoreProductResponse>&& output) {
+          api->GetStoreProductForCurrentApp([reply](ErrorOr<ProductResponseStruct>&& output) {
             if (output.has_error()) {
               reply(WrapError(output.error()));
               return;
@@ -759,7 +990,7 @@ void MsStoreHostApi::SetUp(
     if (api != nullptr) {
       channel.SetMessageHandler([api](const EncodableValue& message, const ::flutter::MessageReply<EncodableValue>& reply) {
         try {
-          api->RequestCurrentAppPurchase([reply](ErrorOr<MsStorePurchaseResponse>&& output) {
+          api->RequestCurrentAppPurchase([reply](ErrorOr<PurchaseResponseStruct>&& output) {
             if (output.has_error()) {
               reply(WrapError(output.error()));
               return;
@@ -831,7 +1062,7 @@ const ::flutter::StandardMessageCodec& MsStoreFlutterApi::GetCodec() {
 }
 
 void MsStoreFlutterApi::OnLicenseChanged(
-  const MsStoreAppLicense& license_arg,
+  const AppLicenseStruct& license_arg,
   std::function<void(void)>&& on_success,
   std::function<void(const FlutterError&)>&& on_error) {
   const std::string channel_name = "dev.flutter.pigeon.ms_store_trial.MsStoreFlutterApi.onLicenseChanged" + message_channel_suffix_;
