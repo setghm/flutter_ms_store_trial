@@ -2,6 +2,8 @@
 
 Offer a trial version of your Flutter app in Windows using the Microsoft Store API.
 
+![ms_store_trial_example](https://github.com/user-attachments/assets/467ebc8a-e5bd-4e0c-8eb7-e925c723f203)
+
 ## Instructions
 
 Before using any functionality of this plugin you must create a Microsoft Partner account, upload
