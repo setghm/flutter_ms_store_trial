@@ -113,14 +113,18 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     // Subscribe to license updates first.
-    _licenseUpdates = MsStoreTrial.instance.licenseStream.listen((event) {
-      _license = event;
-      if (mounted) {
-        setState(() {
-          // Update UI.
+    _licenseUpdates = MsStoreTrial.instance.licenseStream
+        // In production you may want to filter licenses without skuStoreId field to avoid
+        // users to unpack your MSIX app to get full version access.
+        .where((license) => license.skuStoreId.isNotEmpty)
+        .listen((license) {
+          _license = license;
+          if (mounted) {
+            setState(() {
+              // Update UI.
+            });
+          }
         });
-      }
-    });
 
     // IMPORTANT: Restore user app license.
     MsStoreTrial.instance.restoreLicense();
@@ -192,9 +196,13 @@ in [this guide](https://learn.microsoft.com/en-us/windows/msix/desktop/desktop-t
 Listen license changes:
 
 ```dart
-MsStoreTrial.instance.licenseStream.listen((license) {
-  // Update your app state or UI
-});
+MsStoreTrial.instance.licenseStream
+    // In production you may want to filter licenses without skuStoreId field to avoid
+    // users to unpack your MSIX app to get full version access.
+    .where((license) => license.skuStoreId.isNotEmpty)
+    .listen((license) {
+      // Update your app state or UI
+    });
 ```
 
 Restore the user's app license:
@@ -246,6 +254,12 @@ if(name.isEmpty) {
 > [!IMPORTANT]
 > When releasing to Microsoft Store don't forget to pack in release mode, otherwise
 > your users will get missing DLL files errors.
+
+> [!IMPORTANT]
+> Unpacked MSIX apps will receive an activated full version license by default, with an empty
+> [skuStoreId]. In production, you may want to filter these out.
+> 
+> This is the default behavior of the WinRT StoreContext API.
 
 > [!NOTE]
 > Methods to purchase your own app includes:

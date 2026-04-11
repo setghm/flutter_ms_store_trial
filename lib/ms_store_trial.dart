@@ -17,6 +17,25 @@ abstract class MsStoreTrial {
   /// Delivers changes on the current app license.
   ///
   /// You should subscribe this stream before you call `restoreLicense()`.
+  ///
+  /// Note: unpacked MSIX apps will receive an activated full version license
+  /// by default, with an empty [skuStoreId]. In production, you may want to
+  /// filter these out:
+  ///
+  /// ```dart
+  /// MsStoreTrial.instance.licenseStream
+  ///   .where((license) => license.skuStoreId.isNotEmpty)
+  ///   .listen((license) {
+  ///     // Update your app state or UI
+  ///   });
+  /// ```
+  ///
+  /// For a more exhaustive check, you can also compare [skuStoreId] against
+  /// your known app store product ID.
+  ///
+  /// The [skuStoreId] has the format: <product Store ID>/<SKU Store ID>
+  ///
+  /// https://learn.microsoft.com/en-us/uwp/api/windows.services.store.storesku.storeid
   Stream<MsStoreAppLicense> get licenseStream;
 
   /// Returns the Microsoft Store product information associated with this app.
