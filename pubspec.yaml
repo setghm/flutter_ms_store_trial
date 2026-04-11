@@ -1,5 +1,5 @@
 name: ms_store_trial
-description: "Offer a trial version of your Flutter app in Windows using the Microsoft Store API. "
+description: "Use Microsoft Store to offer a trial version of your Flutter app on Windows."
 version: 1.0.0
 homepage:
 

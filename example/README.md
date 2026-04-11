@@ -2,16 +2,12 @@
 
 Demonstrates how to use the ms_store_trial plugin.
 
-## Getting Started
+You can use this example app to learn how to integrate the Microsoft Store
+trial version functionality before setting it up in your project.
 
-This project is a starting point for a Flutter application.
+There are two apps inside the `lib` directory:
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- `DevelopmentApp`: This should be used when you're learning or expanding this plugin. It shows
+  comprehensive info about the current package and Microsoft Store product.
+- `ExampleApp`: This is a simple app to show how the plugin works. It is not meant to demonstrate
+  how the connection between Flutter and Microsoft Store works.
