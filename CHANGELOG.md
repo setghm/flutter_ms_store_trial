@@ -1,6 +1,7 @@
 ## 1.0.2
   
 - Decrease Dart SDK to 3.9.0 to ensure better compatibility.
+- Add screenshots
 
 ## 1.0.1
 
