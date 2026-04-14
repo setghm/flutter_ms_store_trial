@@ -4,7 +4,7 @@ Use Microsoft Store to offer a trial version of your Flutter app on Windows.
 
 This plugin is intended to enable a **one-time purchase** of your app license.
 
-![ms_store_trial_example](https://github.com/user-attachments/assets/467ebc8a-e5bd-4e0c-8eb7-e925c723f203)
+![ms_store_trial_example](doc/ms_store_trial_example.gif)
 
 ## Instructions
 
