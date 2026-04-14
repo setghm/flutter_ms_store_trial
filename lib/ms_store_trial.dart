@@ -33,7 +33,7 @@ abstract class MsStoreTrial {
   /// For a more exhaustive check, you can also compare [skuStoreId] against
   /// your known app store product ID.
   ///
-  /// The [skuStoreId] has the format: <product Store ID>/<SKU Store ID>
+  /// The [skuStoreId] has the format: (product Store ID)/(SKU Store ID)
   ///
   /// https://learn.microsoft.com/en-us/uwp/api/windows.services.store.storesku.storeid
   Stream<MsStoreAppLicense> get licenseStream;

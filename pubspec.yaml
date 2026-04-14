@@ -1,7 +1,7 @@
 name: ms_store_trial
 description: "Use Microsoft Store to offer a trial version of your Flutter app on Windows."
 repository: https://github.com/setghm/flutter_ms_store_trial
-version: 1.0.1
+version: 1.0.2
 
 environment:
   sdk: ^3.9.0
@@ -31,4 +31,4 @@ topics:
 
 screenshots:
   - description: 'Example app running on a Windows machine'
-    path: doc/ms_store_trial.gif
+    path: doc/ms_store_trial_example.gif
