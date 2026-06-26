@@ -6,6 +6,11 @@ This plugin is intended to enable a **one-time purchase** of your app license.
 
 ![ms_store_trial_example](doc/ms_store_trial_example.webp)
 
+## Requirements
+
+- Visual Studio 2022 or later
+- NuGet (optional, auto downloaded if missing)
+
 ## Instructions
 
 Before starting make sure you have a [Microsoft Partner account](https://partner.microsoft.com/).

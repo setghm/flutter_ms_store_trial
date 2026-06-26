@@ -16,18 +16,46 @@ cmake_policy(VERSION 3.14...3.25)
 # not be changed
 set(PLUGIN_NAME "ms_store_trial_plugin")
 
-################ NuGet intall begin ################
-find_program(NUGET_EXE NAMES nuget)
-if(NOT NUGET_EXE)
-	message("NUGET.EXE not found.")
-	message(FATAL_ERROR "Please install this executable, and run CMake again.")
+################ NuGet and WinRT installation begin ################
+
+find_program(NUGET_EXE NAMES nuget nuget.exe)
+
+if (NOT NUGET_EXE)
+	message(STATUS "NUGET.EXE not found, required for ms_store_trial plugin, downloading it automatically...")
+
+	set(NUGET_EXE "${CMAKE_BINARY_DIR}/nuget.exe")
+
+	file(DOWNLOAD
+      "https://dist.nuget.org/win-x86-commandline/v6.12.1/nuget.exe"
+      "${NUGET_EXE}"
+      STATUS DOWNLOAD_STATUS
+      SHOW_PROGRESS)
+
+    list(GET DOWNLOAD_STATUS 0 STATUS_CODE)
+
+    if (NOT STATUS_CODE EQUAL 0)
+      list(GET DOWNLOAD_STATUS 1 ERROR_MSG)
+      message(FATAL_ERROR "Failed to download NUGET.EXE, please install this executable, and run CMake again.")
+    endif()
+
+    message(STATUS "NUGET.EXE downloaded to ${NUGET_EXE}")
 endif()
 
 set(WINRT_VERSION 2.0.250303.1)
 
-execute_process(COMMAND ${NUGET_EXE}
-		install "Microsoft.Windows.CppWinRT" -Version ${WINRT_VERSION} -ExcludeVersion -OutputDirectory ${CMAKE_BINARY_DIR}/packages)
-################ NuGet install end ################
+execute_process(
+  COMMAND ${NUGET_EXE}
+  install "Microsoft.Windows.CppWinRT"
+  -Version ${WINRT_VERSION}
+  -ExcludeVersion
+  -OutputDirectory ${CMAKE_BINARY_DIR}/packages
+  RESULT_VARIABLE NUGET_RESULT)
+
+if(NOT NUGET_RESULT EQUAL 0)
+  message(FATAL_ERROR "Unable to install CppWinRT required to build ms_store_trial plugin (exit code: ${NUGET_RESULT})")
+endif()
+
+################ NuGet and WinRT installation end ################
 
 # Any new source files that you add to the plugin should be added here.
 list(APPEND PLUGIN_SOURCES
